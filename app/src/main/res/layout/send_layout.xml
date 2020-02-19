@@ -1,0 +1,102 @@
+<LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/main_layout"
+    android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
+
+
+
+
+
+    <TextView
+        android:id="@+id/title_slide1"
+        android:layout_width="match_parent"
+        android:textSize="15sp"
+        android:gravity="center"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        />
+
+    <com.google.android.material.tabs.TabLayout
+        android:id="@+id/tabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:tabRippleColor="@color/colorAccent"
+        app:tabIndicatorColor="#555454"
+        android:typeface="sans"
+        app:tabTextColor="#555454"
+        android:background="#edbe00"
+        android:minHeight="?attr/actionBarSize"
+
+        />
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+        <androidx.viewpager.widget.ViewPager
+            android:id="@+id/pager"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="6"
+            />
+
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.7"
+            android:padding="3dp"
+
+            >
+
+            <View
+                android:layout_width="1dp"
+                android:layout_height="1dp"
+                android:id="@+id/cent"
+                android:layout_centerInParent="true"/>
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/exFb"
+                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="#edbe00"
+                android:layout_toRightOf="@+id/cent"
+                android:layout_centerVertical="true"
+                android:text="send"
+                android:contentDescription="@string/appbar_scrolling_view_behavior"
+                tools:ignore="UnknownId" />
+
+
+            <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+                android:id="@+id/ex_counter"
+                style="@style/Widget.MaterialComponents.ExtendedFloatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:backgroundTint="#edbe00"
+                android:layout_toLeftOf="@id/cent"
+                android:layout_centerVertical="true"
+                android:text="5"
+                android:contentDescription="@string/appbar_scrolling_view_behavior"
+                />
+
+
+        </RelativeLayout>
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>

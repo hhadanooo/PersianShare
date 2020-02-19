@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MainActivity"
+    android:background="@drawable/background"
+    android:layoutDirection="ltr"
+    >
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/setting"
+        android:layout_margin="7dp"
+        android:background="@drawable/setting"
+        android:layout_alignParentStart="true"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="7dp"
+        android:id="@+id/addFriends"
+        android:background="@drawable/add_friend"
+        android:layout_alignParentEnd="true"/>
+
+
+
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_top"
+        android:layout_centerHorizontal="true"/>
+    <View
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/view_left" />
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/logo_gra3"
+        android:layout_toEndOf="@+id/view_left"
+        android:layout_below="@+id/view_top"
+        android:id="@+id/icon_bg"
+        />
+
+
+
+
+
+    <ImageView
+        android:id="@+id/SendButton"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="-25dp"
+        android:layout_marginBottom="30dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/send_button"
+        android:layout_centerInParent="true"/>
+
+
+
+
+
+    <ImageView
+        android:id="@+id/ReceiveButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/SendButton"
+        android:background="@drawable/receive_button"
+        android:layout_centerHorizontal="true"/>
+
+
+
+
+
+</RelativeLayout>
