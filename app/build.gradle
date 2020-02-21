@@ -4,7 +4,7 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "ir.hhadanooo.persianshare2"
+        applicationId "ir.hhadanooo.persianshare"
         minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
@@ -28,4 +28,5 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.10.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.10.0'
     implementation 'com.google.android.material:material:1.0.0'
+    implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
 }

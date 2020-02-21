@@ -3,14 +3,21 @@ package ir.hhadanooo.persianshare;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.ResolveInfo;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import java.util.Objects;
+import java.util.prefs.Preferences;
 
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
+import ir.hhadanooo.persianshare.add_friend.addFriendActivity;
+import ir.hhadanooo.persianshare.setting.settingActivity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,11 +39,11 @@ public class MainActivity extends AppCompatActivity {
         View view_top = findViewById(R.id.view_top);
 
 
-        sendButton.getLayoutParams().width = (int)(dm.widthPixels*0.6);
-        sendButton.getLayoutParams().height = (int)(dm.widthPixels*0.17);
+        sendButton.getLayoutParams().width = (int)(dm.widthPixels*0.5);
+        sendButton.getLayoutParams().height = (int)(dm.widthPixels*0.14);
 
-        receiveButton.getLayoutParams().width = (int)(dm.widthPixels*0.6);
-        receiveButton.getLayoutParams().height = (int)(dm.widthPixels*.17);
+        receiveButton.getLayoutParams().width = (int)(dm.widthPixels*0.5);
+        receiveButton.getLayoutParams().height = (int)(dm.widthPixels*.14);
 
         setting.getLayoutParams().width = (int)(dm.widthPixels*0.08);
         setting.getLayoutParams().height = (int)(dm.widthPixels*0.08);
@@ -56,7 +63,42 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 startActivity(new Intent(MainActivity.this , sendActivity.class));
+
             }
         });
+
+        receiveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //startActivity(new Intent(MainActivity.this , sendActivity.class));
+
+                Toast.makeText(MainActivity.this, "there is not activity ", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        addFriends.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this , addFriendActivity.class));
+            }
+        });
+
+        setting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(MainActivity.this , settingActivity.class));
+            }
+        });
+
+
+
+
+        SharedPreferences pref_setting = PreferenceManager.getDefaultSharedPreferences(this);
+
+        boolean vibration = pref_setting.getBoolean("vibration" , true);
+
+        //Toast.makeText(this, ""+vibration, Toast.LENGTH_SHORT).show();
+
+
     }
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+
+    <PreferenceCategory android:title="General">
+        <ListPreference
+            android:id="@+id/set_storage"
+            android:entries="@array/list_locate_save"
+            android:entryValues="@array/list_locate_save"
+            android:key="list_preference_1"
+            android:title="Set storage location"
+            android:summary=""/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="Advance">
+
+
+        <SwitchPreference
+            android:id="@+id/vibration_switch"
+            android:defaultValue="true"
+            android:key="vibration"
+            android:title="vibration"
+            android:summaryOn="vibration select is on"
+            android:summaryOff="vibration select is off"
+            />
+
+        <SwitchPreference
+            android:id="@+id/default_app_switch"
+            android:defaultValue="false"
+            android:key="Show_default_apps"
+            android:title="Show default apps"
+            android:summaryOn="Show apps default phone"
+            android:summaryOff="Hide apps default phone"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>
