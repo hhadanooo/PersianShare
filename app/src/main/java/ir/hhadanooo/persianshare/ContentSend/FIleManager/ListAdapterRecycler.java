@@ -2,6 +2,7 @@ package ir.hhadanooo.persianshare.ContentSend.FIleManager;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
@@ -10,6 +11,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +27,7 @@ import com.bumptech.glide.Glide;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.R;
@@ -39,6 +44,8 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
     private boolean isExists = false;
     private int width;
     private String endName;
+
+
 
 
 
@@ -174,12 +181,14 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
         holder.name_file.setMaxWidth((int) (width*.5));
         holder.icon_select.getLayoutParams().height = (int) (width*.06);
         holder.icon_select.getLayoutParams().width = (int) (width*.06);
-        holder.lay_select.getLayoutParams().width = (int) (width*.1);
+        holder.lay_select.getLayoutParams().width = (int) (width*.3);
         holder.lay_select.getLayoutParams().height = (int) (width*.1);
         Glide.with(holder.icon_file).load(item.getIcon_file()).into(holder.icon_file);
         selectList = new ArrayList<>();
 
+        SharedPreferences pref_setting = PreferenceManager.getDefaultSharedPreferences(context);
 
+        final boolean vibration = pref_setting.getBoolean("vibration" , true);
 
         holder.lay_select.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -189,6 +198,18 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
                 isExists =false;
                 if (selectList == null){
                     selectList = new ArrayList<>();
+                }
+
+                if (vibration){
+                    Vibrator vib = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
+                    // Vibrate for 500 milliseconds
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                        Objects.requireNonNull(vib).vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        //deprecated in API 26
+                        Objects.requireNonNull(vib).vibrate(100);
+                    }
                 }
 
 

@@ -25,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/lay_select_all"
+            android:layout_marginEnd="7dp"
             android:layout_alignParentEnd="true"
             android:padding="1dp"
             >

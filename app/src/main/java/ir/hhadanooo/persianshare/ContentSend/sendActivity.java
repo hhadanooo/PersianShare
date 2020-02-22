@@ -5,18 +5,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
+import android.content.res.Resources;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
-
-
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
+import com.wang.avi.AVLoadingIndicatorView;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-
 import ir.hhadanooo.persianshare.ContentSend.Slider.PagerAdapterFrag;
 import ir.hhadanooo.persianshare.ContentSend.Slider.SlideFileManager;
 import ir.hhadanooo.persianshare.R;
@@ -34,6 +38,9 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
     PagerAdapterFrag adapterFrag;
     SlideFileManager fragment;
     public static DisplayMetrics dm;
+    RelativeLayout lay_viewPager;
+    AVLoadingIndicatorView a;
+    Handler handler = new Handler();
 
 
     @SuppressLint("SetTextI18n")
@@ -44,10 +51,34 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
         Objects.requireNonNull(getSupportActionBar()).hide();
 
 
-
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.TRANSPARENT);
+        window.setNavigationBarColor(Color.TRANSPARENT);
 
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        lay_viewPager = findViewById(R.id.lay_viewPager);
+
+
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                a = new AVLoadingIndicatorView(sendActivity.this);
+                handler.postDelayed(new loop() , 100);
+                a.setIndicator("BallScaleMultipleIndicator");
+                a.setIndicatorColor(Color.BLACK);
+                lay_viewPager.addView(a);
+                RelativeLayout.LayoutParams layoutParams =
+                        (RelativeLayout.LayoutParams)a.getLayoutParams();
+                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
+                a.setLayoutParams(layoutParams);
+                a.getLayoutParams().width = (int)(dm.widthPixels*0.4);
+                a.getLayoutParams().height = (int)(dm.widthPixels*0.4);
+                a.show();
+            }
+        }).start();
 
 
 
@@ -57,6 +88,7 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
         list = new ArrayList<>();
 
         viewPager = findViewById(R.id.pager);
+
 
         exfb = findViewById(R.id.exFb);
         cent = findViewById(R.id.cent);
@@ -86,20 +118,40 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
         });
 
 
-        adapterFrag = new PagerAdapterFrag(getSupportFragmentManager(), 2);
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        new Handler().postDelayed(new Runnable() {
+                            @Override
+                            public void run() {
 
 
-        viewPager.setAdapter(adapterFrag);
+                                adapterFrag = new PagerAdapterFrag(getSupportFragmentManager(), 2);
+
+                                viewPager.setAdapter(adapterFrag);
+
+                                tabLayout.setupWithViewPager(viewPager);
+
+                                tabLayout.setOnTabSelectedListener(sendActivity.this);
+
+                                fragment = (SlideFileManager) Objects
+                                        .requireNonNull(viewPager.getAdapter()).instantiateItem(viewPager, viewPager.getCurrentItem());
+
+
+                            }
+                        },1000);
+                    }
+                });
 
 
 
+            }
+        }).start();
 
-        tabLayout.setupWithViewPager(viewPager);
-
-        tabLayout.setOnTabSelectedListener(sendActivity.this);
-
-        fragment = (SlideFileManager) Objects
-                .requireNonNull(viewPager.getAdapter()).instantiateItem(viewPager, viewPager.getCurrentItem());
 
 
 
@@ -131,7 +183,16 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
 
 
 
+    public class loop implements Runnable{
+        @Override
+        public void run() {
+            if (adapterFrag != null){
+               a.hide();
+            }
+            handler.postDelayed(this , 300);
 
+        }
+    }
 
 
     @Override

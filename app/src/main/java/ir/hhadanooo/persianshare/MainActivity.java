@@ -5,10 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ResolveInfo;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.DisplayMetrics;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -29,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+        soft_key();
 
         ImageView sendButton = findViewById(R.id.SendButton);
         ImageView receiveButton = findViewById(R.id.ReceiveButton);
@@ -100,5 +105,13 @@ public class MainActivity extends AppCompatActivity {
         //Toast.makeText(this, ""+vibration, Toast.LENGTH_SHORT).show();
 
 
+    }
+
+
+    public void soft_key(){
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.TRANSPARENT);
+        window.setNavigationBarColor(Color.TRANSPARENT);
     }
 }

@@ -2,11 +2,13 @@ package ir.hhadanooo.persianshare.ContentSend.Slider;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,6 +62,9 @@ public class SlideAppPicker extends Fragment{
         List<String> sizeapp = new ArrayList<>();
         listPathapp = new ArrayList<>();
         int index = 0;
+        SharedPreferences pref_setting = PreferenceManager.getDefaultSharedPreferences(getContext());
+
+        final boolean HidenApp = pref_setting.getBoolean("Show_default_apps" , true);
         for (int i = 0 ; i < apps.size() ; i++) {
             boolean repeat = false;
             ResolveInfo packageInfo = apps.get(i);
@@ -69,12 +74,15 @@ public class SlideAppPicker extends Fragment{
 
             packageName = packageName.substring(packageName.indexOf(" ")+1);
             packageName = packageName.substring(0 , packageName.indexOf("/"));
-            if (packageName.contains("com.android.") ||
-                    packageName.contains("com.huawei.")){
+            if (!HidenApp){
+                if (packageName.contains("com.android.") ||
+                        packageName.contains("com.huawei.")){
 
-                repeat = true;
-                index++;
+                    repeat = true;
+                    index++;
+                }
             }
+
 
             for (int i1 = 0; i1 < data.size() ; i1++){
                 if (data.get(i1).equals(packageName)){

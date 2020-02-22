@@ -13,6 +13,7 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -21,6 +22,8 @@ import android.text.method.LinkMovementMethod;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -38,9 +41,7 @@ import java.util.Objects;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
-import ir.hhadanooo.persianshare.MainActivity;
 import ir.hhadanooo.persianshare.R;
-import ir.hhadanooo.persianshare.bluetooth.BluetoothShare;
 
 public class addFriendActivity extends AppCompatActivity {
 
@@ -48,7 +49,10 @@ public class addFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
-
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.TRANSPARENT);
+        window.setNavigationBarColor(Color.TRANSPARENT);
         QRGEncoder qrgEncoder = new QRGEncoder("https://www.google.com/"
                 , null, QRGContents.Type.TEXT,200);
 
