@@ -2,6 +2,8 @@ package ir.hhadanooo.persianshare.ContentSend;
 
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import android.annotation.SuppressLint;
@@ -9,22 +11,36 @@ import android.content.res.Resources;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
+import android.provider.CalendarContract;
 import android.util.DisplayMetrics;
+import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.material.bottomsheet.BottomSheetBehavior;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
 import com.wang.avi.AVLoadingIndicatorView;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+
+import ir.hhadanooo.persianshare.ContentSend.FIleManager.ListAdapterRecycler;
+import ir.hhadanooo.persianshare.ContentSend.FIleManager.ModelItem;
 import ir.hhadanooo.persianshare.ContentSend.Slider.PagerAdapterFrag;
+import ir.hhadanooo.persianshare.ContentSend.Slider.SlideAppPicker;
 import ir.hhadanooo.persianshare.ContentSend.Slider.SlideFileManager;
 import ir.hhadanooo.persianshare.R;
-
+import ir.hhadanooo.persianshare.bottomSheet.DialogBottomSheetAdapter;
+import ir.hhadanooo.persianshare.bottomSheet.ModelItemBottomSheet;
 
 
 public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener {
@@ -41,6 +57,10 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
     RelativeLayout lay_viewPager;
     AVLoadingIndicatorView a;
     Handler handler = new Handler();
+    List<ModelItemBottomSheet> listFile;
+    RecyclerView rv_bottom_sheet;
+    float sizeAll;
+
 
 
     @SuppressLint("SetTextI18n")
@@ -117,6 +137,67 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
             }
         });
 
+        final BottomSheetDialog bottomSheerDialog = new BottomSheetDialog(sendActivity.this);
+        ex_counter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                if (list.size() > 0) {
+
+
+                    View parentView = getLayoutInflater().inflate(R.layout.dialogsheet, null);
+                    rv_bottom_sheet = parentView.findViewById(R.id.rv_bottom_sheet);
+
+                    TextView tv_selected_bottom_sheet = parentView.findViewById(R.id.tv_selected_bottom_sheet);
+                    TextView tv_size_length_bottom_sheet = parentView.findViewById(R.id.tv_size_length_bottom_sheet);
+                    ImageView iv_delete_all_bottom_sheet = parentView.findViewById(R.id.iv_delete_all_bottom_sheet);
+
+
+                    iv_delete_all_bottom_sheet.getLayoutParams().height = (int) (dm.widthPixels * 0.1);
+                    iv_delete_all_bottom_sheet.getLayoutParams().width = (int) (dm.widthPixels * 0.1);
+                    iv_delete_all_bottom_sheet.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                      /*  SlideAppPicker slideAppPicker = new SlideAppPicker();
+                        slideAppPicker.resetList();
+                        list.clear();
+                        bottomSheerDialog.hide();*/
+                        }
+                    });
+
+                    listFile = new ArrayList<>();
+                    prepareData();
+                    String sizeapp;
+                    sizeAll = sizeAll / 1024 / 1024 / 1024;
+                    if (sizeAll < 1.0) {
+                        sizeAll = sizeAll * 1024;
+                        if (sizeAll < 1.0) {
+                            sizeAll = sizeAll * 1024;
+                            @SuppressLint("DefaultLocale") String size = String.format("%.2f", sizeAll);
+                            sizeapp = size + " KB";
+                        } else {
+                            @SuppressLint("DefaultLocale") String size = String.format("%.2f", sizeAll);
+
+                            sizeapp = size + " MB";
+                        }
+                    } else {
+                        @SuppressLint("DefaultLocale") String size = String.format("%.2f", sizeAll);
+
+                        sizeapp = size + " GB";
+                    }
+                    tv_size_length_bottom_sheet.setText(list.size() + " of " + sizeapp);
+                    refreshDisplay();
+
+                    bottomSheerDialog.setContentView(parentView);
+                    //BottomSheetBehavior bottomSheetBehavior = BottomSheetBehavior.from((View) parentView.getParent());
+
+                    TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 200, getResources().getDisplayMetrics());
+                    bottomSheerDialog.show();
+
+                }
+            }
+        });
+
 
 
         new Thread(new Runnable() {
@@ -156,6 +237,44 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
 
 
 
+    }
+
+    private void prepareData() {
+        if (list.size() > 0){
+            for (int i = 0 ; i < list.size() ; i++){
+
+                File file = new File(list.get(i));
+                String sizeapp;
+                float sizeByte = (float) file.length();
+                sizeAll = sizeAll+sizeByte;
+                sizeByte = sizeByte/1024/1024/1024;
+                if (sizeByte < 1.0){
+                    sizeByte = sizeByte*1024;
+                    if (sizeByte < 1.0){
+                        sizeByte = sizeByte*1024;
+                        @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+                        sizeapp = size+" KB";
+                    }else {
+                        @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+
+                        sizeapp = size+" MB";
+                    }
+                }else {
+                    @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+
+                    sizeapp = size+" GB";
+                }
+                //String nameFile = list.get(i).substring(list.get(i).lastIndexOf("/")+1);
+                listFile.add(new ModelItemBottomSheet(list.get(i) , sizeapp , R.drawable.doc_icon2 , R.drawable.xicon));
+            }
+        }
+
+    }
+    private void refreshDisplay() {
+        int numberOfColumns = 1;
+        rv_bottom_sheet.setLayoutManager(new GridLayoutManager(sendActivity.this,numberOfColumns ));
+        DialogBottomSheetAdapter adapter = new DialogBottomSheetAdapter(sendActivity.this, listFile,dm.widthPixels , list);
+        rv_bottom_sheet.setAdapter(adapter);
     }
 
     @Override

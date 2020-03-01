@@ -31,6 +31,11 @@ public class SlideAppPicker extends Fragment{
     private List<String> pathapp;
     private static List<String> listPathapp;
     private String appName;
+    RecyclerView recyclerView;
+    Drawable[] icons;
+    List<String> name;
+    List<String> data;
+    List<String> sizeapp;
 
     @Nullable
     @Override
@@ -55,11 +60,11 @@ public class SlideAppPicker extends Fragment{
         List<ResolveInfo> apps = Objects.requireNonNull(getActivity()).getPackageManager().queryIntentActivities(intent, 0);
 
 
-        Drawable[] icons = new Drawable[apps.size()];
-        List<String> data = new ArrayList<>();
-        List<String> name = new ArrayList<>();
+        icons = new Drawable[apps.size()];
+        data = new ArrayList<>();
+        name = new ArrayList<>();
         pathapp = new ArrayList<>();
-        List<String> sizeapp = new ArrayList<>();
+        sizeapp = new ArrayList<>();
         listPathapp = new ArrayList<>();
         int index = 0;
         SharedPreferences pref_setting = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -140,7 +145,7 @@ public class SlideAppPicker extends Fragment{
 
         //Toast.makeText(this, ""+icons[19], Toast.LENGTH_SHORT).show();
 
-        RecyclerView recyclerView = view.findViewById(R.id.rvNumbers);
+        recyclerView = view.findViewById(R.id.rvNumbers);
         int numberOfColumns = 4;
         recyclerView.setLayoutManager(new GridLayoutManager(getContext(),numberOfColumns ));
         MyRecyclerViewAdapter adapter = new MyRecyclerViewAdapter(getContext(), name, icons, sizeapp);
@@ -173,6 +178,11 @@ public class SlideAppPicker extends Fragment{
         recyclerView.setAdapter(adapter);
 
 
+
+    }
+
+    public void resetList(){
+        listPathapp.clear();
     }
 
 

@@ -2,7 +2,12 @@ package ir.hhadanooo.persianshare.ContentSend.AppPicker;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
+import android.os.Build;
+import android.os.VibrationEffect;
+import android.os.Vibrator;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.R;
@@ -118,7 +124,20 @@ public class MyRecyclerViewAdapter extends RecyclerView.Adapter<MyRecyclerViewAd
         @Override
         public void onClick(View view) {
             if (mClickListener != null){
+                SharedPreferences pref_setting = PreferenceManager.getDefaultSharedPreferences(view.getContext());
+                final boolean vibration = pref_setting.getBoolean("vibration" , true);
 
+                if (vibration){
+                    Vibrator vib = (Vibrator) view.getContext().getSystemService(Context.VIBRATOR_SERVICE);
+                    // Vibrate for 500 milliseconds
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+
+                        Objects.requireNonNull(vib).vibrate(VibrationEffect.createOneShot(500, VibrationEffect.DEFAULT_AMPLITUDE));
+                    } else {
+                        //deprecated in API 26
+                        Objects.requireNonNull(vib).vibrate(100);
+                    }
+                }
                 mClickListener.onItemClick(view, getAdapterPosition());
 
                 boolean isExists = false;

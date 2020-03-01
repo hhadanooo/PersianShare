@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,98 +78,15 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
 
         ModelItem item = listFile.get(position);
         String setName = item.getFilename();
+
         if (setName.length() > 25){
             endName = setName.substring(setName.length()-10);
-        }
 
-        if (setName.contains(".")){
+            String startName = setName.substring(0 ,10 );
 
-            if (!setName.endsWith(".mp3") &&
-                    !setName.endsWith(".MP3") &&
-                    !setName.endsWith(".ogg") &&
-                    !setName.endsWith(".m4a") &&
-                    !setName.endsWith(".jpg") &&
-                    !setName.endsWith(".JPG") &&
-                    !setName.endsWith(".png") &&
-                    !setName.endsWith(".PNG") &&
-                    !setName.endsWith(".jpeg") &&
-                    !setName.endsWith(".JPEG") &&
-                    !setName.endsWith(".bmp") &&
-                    !setName.endsWith(".mp4") &&
-                    !setName.endsWith(".MP4") &&
-                    !setName.endsWith(".mkv") &&
-                    !setName.endsWith(".MKV") &&
-                    !setName.endsWith(".3gp") &&
-                    !setName.endsWith(".txt") &&
-                    !setName.endsWith(".apk") &&
-                    !setName.endsWith(".php") &&
-                    !setName.endsWith(".jar") &&
-                    !setName.endsWith(".exe") &&
-                    !setName.endsWith(".zip") &&
-                    !setName.endsWith(".html") &&
-                    !setName.endsWith(".pdf") &&
-                    !setName.endsWith(".PDF") &&
-                    !setName.endsWith(".rar") &&
-                    !setName.endsWith(".ppmx")&&
-                    !setName.endsWith(".7z")&&
-                    !setName.endsWith(".7Z")&&
-                    !setName.endsWith(".APPX")&&
-                    !setName.endsWith(".appx")&&
-                    !setName.endsWith(".DMG")&&
-                    !setName.endsWith(".dmg")&&
-                    !setName.endsWith(".iso")&&
-                    !setName.endsWith(".jar")&&
-                    !setName.endsWith(".py")&&
-                    !setName.endsWith(".xap")&&
-                    !setName.endsWith(".XAP")&&
-                    !setName.endsWith(".dat")&&
-                    !setName.endsWith(".asc")&&
-                    !setName.endsWith(".egg")&&
-                    !setName.endsWith(".tiff")&&
-                    !setName.endsWith(".TIFF")&&
-                    !setName.endsWith(".ppt")&&
-                    !setName.endsWith(".pps")){
-
-
-
-
-                if (setName.length() > 25){
-
-                    String startName = setName.substring(0 ,10 );
-
-                    holder.name_file_show.setText(startName+" ... "+endName);
-                }else {
-                    holder.name_file_show.setText(setName);
-                }
-
-
-            }else{
-
-                
-
-                if (setName.length() > 25){
-
-                    String startName = setName.substring(0 ,10 );
-
-                    holder.name_file_show.setText(startName+" ... "+endName);
-                }else {
-                    holder.name_file_show.setText(setName);
-                }
-
-
-
-            }
-
-
+            holder.name_file_show.setText(startName+" ... "+endName);
         }else {
-            if (setName.length() > 25){
-
-                String startName = setName.substring(0 ,10 );
-
-                holder.name_file_show.setText(startName+" ... "+endName);
-            }else {
-                holder.name_file_show.setText(setName);
-            }
+            holder.name_file_show.setText(setName);
         }
 
 
@@ -179,10 +97,14 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
         holder.icon_file.getLayoutParams().width = (int) (width*.12);
         holder.icon_file.getLayoutParams().height = (int) (width*.12);
         holder.name_file.setMaxWidth((int) (width*.5));
-        holder.icon_select.getLayoutParams().height = (int) (width*.06);
-        holder.icon_select.getLayoutParams().width = (int) (width*.06);
+
+        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
+                (int) (width*.06), (int) (width*.06));
+        lp.setMargins((int) (width*.21) , (int) (width*.035) , 0 ,0);
+        holder.icon_select.setLayoutParams(lp);
         holder.lay_select.getLayoutParams().width = (int) (width*.3);
-        holder.lay_select.getLayoutParams().height = (int) (width*.1);
+        holder.lay_select.getLayoutParams().height = (int) (width*.13 );
+
         Glide.with(holder.icon_file).load(item.getIcon_file()).into(holder.icon_file);
         selectList = new ArrayList<>();
 
@@ -321,6 +243,8 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
 
         }
 
+
+
         if (nameFile.contains(".") && (nameFile.endsWith(".apk")
 
         )) {
@@ -400,15 +324,6 @@ public class ListAdapterRecycler extends RecyclerView.Adapter<ListAdapterRecycle
             size_file = itemView.findViewById(R.id.size_file);
             name_file_show = itemView.findViewById(R.id.name_file_show);
             lay = itemView.findViewById(R.id.lay);
-
-
-
-
-
-
-
-
-
 
 
 
