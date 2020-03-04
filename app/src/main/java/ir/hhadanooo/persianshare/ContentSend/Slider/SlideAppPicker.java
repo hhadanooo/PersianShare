@@ -133,11 +133,12 @@ public class SlideAppPicker extends Fragment{
 
 
                 try {
-                    Drawable icon = getActivity().getPackageManager().getApplicationIcon(packageName);
-                    icons[i-index] = icon;
+                    icons[i-index] = getActivity().getPackageManager().getApplicationIcon(packageName);
                 } catch (PackageManager.NameNotFoundException e) {
                     e.printStackTrace();
                 }
+                //Drawable icon = getResources().getDrawable(R.drawable.add_friend);
+
             }
 
 

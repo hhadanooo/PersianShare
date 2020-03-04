@@ -487,7 +487,7 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
                         sizeapp = size+" GB";
                     }
 
-                    listFile.add(new ModelItem(appList.get(i) , sizeapp , R.drawable.apk_icon , R.drawable.unselect));
+                    listFile.add(new ModelItem(appList.get(i) , sizeapp , R.drawable.doc_icon2 , R.drawable.unselect));
                     checkForNoRepeat(listAddress , appListAddress.get(i));
                     checkForNoRepeat(listpath , appListAddress.get(i));
                     checkForNoRepeat(listAllSelect , appListAddress.get(i));

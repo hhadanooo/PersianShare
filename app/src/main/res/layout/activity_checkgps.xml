@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".CheckGPS.CheckGPS"
+    android:background="@drawable/backgrond_nontext">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/ic_check_gps"
+        android:background="@drawable/iconsharing512"
+        />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#FFFFFF"
+        android:id="@+id/tv_check_gps"/>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/lay_gps_item"
+        android:padding="5dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/iv_item_gps_on"
+            android:background="@drawable/icon_gps"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#000"
+            android:text="@string/open_gps"
+            android:layout_toEndOf="@id/iv_item_gps_on"
+            android:layout_alignParentTop="true"
+            android:id="@+id/title_gps_on"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/android_6_0_or_above_requires_you_to_open_location_service_to_find_friends_nearby"
+            android:layout_toEndOf="@id/iv_item_gps_on"
+            android:layout_below="@id/title_gps_on"
+            android:id="@+id/iv_item_help_gps_on"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:src="@drawable/buttonopen"
+            android:id="@+id/btn_item_gps_on"
+            />
+
+
+    </RelativeLayout>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:src="@drawable/buttonnextoff"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_next_gps"/>
+
+</RelativeLayout>

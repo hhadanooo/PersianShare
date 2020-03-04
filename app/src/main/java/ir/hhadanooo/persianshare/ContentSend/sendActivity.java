@@ -1,18 +1,23 @@
 package ir.hhadanooo.persianshare.ContentSend;
 
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
-import android.content.res.Resources;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.CalendarContract;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.View;
 import android.view.Window;
@@ -22,7 +27,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.material.bottomsheet.BottomSheetBehavior;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -33,14 +37,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import ir.hhadanooo.persianshare.ContentSend.FIleManager.ListAdapterRecycler;
-import ir.hhadanooo.persianshare.ContentSend.FIleManager.ModelItem;
+import ir.hhadanooo.persianshare.CheckGPS.CheckGPS;
+import ir.hhadanooo.persianshare.ConnectToReciever.ConnectToReciever;
 import ir.hhadanooo.persianshare.ContentSend.Slider.PagerAdapterFrag;
-import ir.hhadanooo.persianshare.ContentSend.Slider.SlideAppPicker;
 import ir.hhadanooo.persianshare.ContentSend.Slider.SlideFileManager;
 import ir.hhadanooo.persianshare.R;
-import ir.hhadanooo.persianshare.bottomSheet.DialogBottomSheetAdapter;
-import ir.hhadanooo.persianshare.bottomSheet.ModelItemBottomSheet;
+import ir.hhadanooo.persianshare.ContentSend.bottomSheet.DialogBottomSheetAdapter;
+import ir.hhadanooo.persianshare.ContentSend.bottomSheet.ModelItemBottomSheet;
 
 
 public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnTabSelectedListener {
@@ -126,16 +129,38 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
         cent.getLayoutParams().width = (int)(dm.widthPixels*0.1);
 
 
-        exfb.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+            exfb.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
 
+                    if (list.size() > 0) {
 
-                Toast.makeText(sendActivity.this, list.size() + "\n" + list, Toast.LENGTH_SHORT).show();
+                        //Toast.makeText(sendActivity.this, list.size() + "\n" + list, Toast.LENGTH_SHORT).show();
+                        String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+                        if (provider != null) {
+                            Log.i("Tat", " Location providers: " + provider);
+                            if (provider.equals("")) {
 
+                                // Toast.makeText(sendActivity.this, " Location providers: "+provider, Toast.LENGTH_SHORT).show();
+                                startActivity(new Intent(sendActivity.this, CheckGPS.class));
+                            } else {
+                                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                    if (checkSelfPermission(Manifest.permission.CAMERA) !=
+                                            PackageManager.PERMISSION_GRANTED){
+                                        requestPermissions(new String[]{Manifest.permission.CAMERA} , 564);
+                                    }else {
+                                        startActivity(new Intent(sendActivity.this , ConnectToReciever.class ));
+                                    }
+                                }
+                            }
 
-            }
-        });
+                        }
+
+                    }else {
+                        Toast.makeText(sendActivity.this, "plz choose ", Toast.LENGTH_SHORT).show();
+                    }
+                }
+            });
 
         final BottomSheetDialog bottomSheerDialog = new BottomSheetDialog(sendActivity.this);
         ex_counter.setOnClickListener(new View.OnClickListener() {
@@ -311,6 +336,18 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
             handler.postDelayed(this , 300);
 
         }
+    }
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        if (requestCode == 564 && grantResults[0] == PackageManager.PERMISSION_GRANTED){
+           // Toast.makeText(this, "ramin", Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(sendActivity.this , ConnectToReciever.class ));
+        }
+
     }
 
 

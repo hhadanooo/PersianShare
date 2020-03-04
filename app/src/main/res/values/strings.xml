@@ -6,6 +6,10 @@
     <string name="scan_the_qr_code_tho_download_persianshare">Scan the QR code the download PersianShare</string>
     <string name="more">more</string>
     <string name="share_using">slm</string>
+    <string name="open_gps">Open GPS</string>
+    <string name="android_6_0_or_above_requires_you_to_open_location_service_to_find_friends_nearby">Android 6.0 or above requires you to open location service to find friends nearby</string>
+    <string name="open">open</string>
+    <string name="next">next</string>
 
 
     <array name="list_locate_save">
