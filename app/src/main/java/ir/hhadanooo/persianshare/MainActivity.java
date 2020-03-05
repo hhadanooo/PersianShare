@@ -19,6 +19,7 @@ import android.widget.Toast;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
+import ir.hhadanooo.persianshare.ContentReceive.ReceiveActivity;
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.add_friend.addFriendActivity;
 import ir.hhadanooo.persianshare.setting.settingActivity;
@@ -75,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         receiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //startActivity(new Intent(MainActivity.this , sendActivity.class));
+                startActivity(new Intent(MainActivity.this , ReceiveActivity.class));
 
-                Toast.makeText(MainActivity.this, "there is not activity ", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(MainActivity.this, "there is not activity ", Toast.LENGTH_SHORT).show();
             }
         });
 

@@ -11,12 +11,18 @@
     <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_BLUETOOTH_SHARE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.CAMERA"/>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission
         android:name="android.permission.BLUETOOTH_PRIVILEGED"
         tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -26,7 +32,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:ignore="AllowBackup,GoogleAppIndexingWarning">
-        <activity android:name=".ConnectToReciever.ConnectToReciever"></activity>
+        <activity android:name=".ContentReceive.ReceiveActivity"></activity>
+        <activity android:name=".ContentTransfer.PortalReceiver.ActivityPortalReceiver" />
+        <activity android:name=".ContentTransfer.PortalSender.ActivityPortalSender" />
+        <activity android:name=".ContentTransfer.CheckProveNameWifi" />
+        <activity android:name=".ConnectToReciever.ConnectToReciever" />
         <activity android:name=".CheckGPS.CheckGPS" />
         <activity android:name=".setting.settingActivity" />
         <activity android:name=".add_friend.addFriendActivity" />
@@ -39,7 +49,8 @@
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
-            <meta-data android:name="com.google.android.gms.vision.DEPENDENCIES"
+            <meta-data
+                android:name="com.google.android.gms.vision.DEPENDENCIES"
                 android:value="barcode" />
         </provider>
 
