@@ -161,7 +161,6 @@ public class ConnectToReciever extends AppCompatActivity {
                 ).setAutoFocusEnabled(true)
                 .build();
 
-
         barcode.getHolder().addCallback(new SurfaceHolder.Callback() {
             @Override
             public void surfaceCreated(SurfaceHolder holder) {

@@ -69,6 +69,7 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
 
 
             path = Environment.getExternalStorageDirectory().toString();
+            String path2 = Environment.getExternalStorageState();
 
             if (ActivityCompat.checkSelfPermission(getActivity() , Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                     PackageManager.PERMISSION_GRANTED){

@@ -9,7 +9,12 @@ import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
+
+import java.util.Objects;
 
 import ir.hhadanooo.persianshare.ConnectToReciever.ConnectToReciever;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalSender.ActivityPortalSender;
@@ -27,7 +32,10 @@ public class CheckProveNameWifi extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Objects.requireNonNull(getSupportActionBar()).hide();
         setContentView(R.layout.activity_check_prove_name_wifi);
+        ImageView iv = findViewById(R.id.animWithMorche);
+        Glide.with(this).load(R.drawable.animgif).into(iv);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
         handler = new Handler();
         connManager =  (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);

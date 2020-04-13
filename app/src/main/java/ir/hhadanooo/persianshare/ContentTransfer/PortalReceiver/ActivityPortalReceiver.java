@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,6 +39,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ir.hhadanooo.persianshare.R;
 
@@ -64,7 +66,7 @@ public class ActivityPortalReceiver extends AppCompatActivity {
     boolean check_for = true;
     List<CustomItemPortal> list_item;
     LinearLayout linearLayout;
-    RelativeLayout relativeLayout;
+    RelativeLayout relativeLayout , lay_tv_time_server , lay_tv_size_all_server;
     FileOutputStream file_out;
     int sss = 0;
     WifiManager.LocalOnlyHotspotReservation mReservation;
@@ -72,8 +74,7 @@ public class ActivityPortalReceiver extends AppCompatActivity {
     int i = 0;
     boolean check_while = true;
     long n = 0;
-    TextView tv_status;
-    TextView tv_size_all;
+    TextView tv_status , tv_size_all , text_PasSize , text_sizeReceived , text_PasTime , text_timePassed , tv_total_send;
     long size_all_received = 0;
     String count_all;
     int c_time1 = 0;
@@ -90,6 +91,9 @@ public class ActivityPortalReceiver extends AppCompatActivity {
     TextView tv_time;
     int counter_time = 0;
     long dt_all = 0;
+    View solidEndItem , spaceBelowSeek;
+
+    DisplayMetrics dm;
 
 
 
@@ -99,11 +103,36 @@ public class ActivityPortalReceiver extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portal_receiver);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         init();
 
-        start_server();
+        //start_server();
+
+        //final String[] sp = s[z].split(":");
+
+        for (int i = 0 ; i < 15 ; i++){
+            final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this  , dm);
+
+            custom_item.SetText_name("hhadnooo");
+            String str = "hadan";
+
+            long size = 150L;
+
+            size_all += size;
+            custom_item.SetText_size(String.valueOf((size)));
+            custom_item.SetMaxValue((int) size);
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    linearLayout.addView(custom_item);
+                }
+            });
+            list_item.add(custom_item);
 
 
+        }
 
 
     }
@@ -114,8 +143,15 @@ public class ActivityPortalReceiver extends AppCompatActivity {
         // initialize object activity receive
 
         tv_size_all = findViewById(R.id.tv_size_all_server);
-
         tv_time = findViewById(R.id.tv_time_server);
+        text_PasSize = findViewById(R.id.text_PasSize);
+        text_sizeReceived = findViewById(R.id.text_sizeReceived);
+        text_PasTime = findViewById(R.id.text_PasTime);
+        text_timePassed = findViewById(R.id.text_timePassed);
+        tv_total_send = findViewById(R.id.tv_total_send);
+
+
+
         manager = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
 
         socket = new Socket();
@@ -131,7 +167,33 @@ public class ActivityPortalReceiver extends AppCompatActivity {
         list_item = new ArrayList<>();
 
         linearLayout = findViewById(R.id.lin);
+
         relativeLayout = findViewById(R.id.rel);
+        lay_tv_time_server = findViewById(R.id.lay_tv_time_server);
+        lay_tv_size_all_server = findViewById(R.id.lay_tv_size_all_server);
+        solidEndItem = findViewById(R.id.solidEndItem);
+        spaceBelowSeek = findViewById(R.id.spaceBelowSeek);
+
+        lay_tv_time_server.getLayoutParams().height = (int) (dm.widthPixels*.2);
+        lay_tv_size_all_server.getLayoutParams().height = (int) (dm.widthPixels*.2);
+
+        tv_size_all.setTextSize((int) (dm.widthPixels*.05));
+
+        tv_time.setTextSize((int) (dm.widthPixels*.05));
+
+        text_PasSize.setTextSize((int) (dm.widthPixels*.009));
+        text_sizeReceived.setTextSize((int) (dm.widthPixels*.009));
+        text_PasTime.setTextSize((int) (dm.widthPixels*.009));
+        text_timePassed.setTextSize((int) (dm.widthPixels*.009));
+
+        solidEndItem.getLayoutParams().width = (int) (dm.widthPixels*.9);
+
+        spaceBelowSeek.getLayoutParams().width = (int) (dm.widthPixels*.01);
+        spaceBelowSeek.getLayoutParams().height = (int) (dm.widthPixels*.01);
+
+        tv_total_send.setText("File  (4/5)");
+        tv_total_send.setTextSize((int) (dm.widthPixels*.013));
+
         Create_defualt_dir();
 
         //start_server();
@@ -195,8 +257,8 @@ public class ActivityPortalReceiver extends AppCompatActivity {
                     }
                 });
 
-                Thread thread = new Thread(new thread_read());
-                thread.start();
+                //Thread thread = new Thread(new thread_read());
+                //thread.start();
 
 
 
@@ -243,7 +305,7 @@ public class ActivityPortalReceiver extends AppCompatActivity {
                                 for(int z = 0;z<s.length;z++)
                                 {
                                     final String[] sp = s[z].split(":");
-                                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this);
+                                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this , dm);
 
                                     custom_item.SetText_name(sp[0]);
                                     String str = sp[1];

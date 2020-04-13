@@ -4,6 +4,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.Manifest;
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
@@ -22,9 +24,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
 import java.util.Objects;
 
 import ir.hhadanooo.persianshare.ConnectToReciever.ConnectToReciever;
+import ir.hhadanooo.persianshare.ContentReceive.ReceiveActivity;
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.R;
 
@@ -46,6 +52,11 @@ public class CheckGPS extends AppCompatActivity {
 
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+
+
+
+
 
         ImageView ic_check_gps = findViewById(R.id.ic_check_gps);
         TextView tv_check_gps = findViewById(R.id.tv_check_gps);
@@ -140,9 +151,20 @@ public class CheckGPS extends AppCompatActivity {
                                     PackageManager.PERMISSION_GRANTED){
                                 requestPermissions(new String[]{Manifest.permission.CAMERA} , 564);
                             }else {
+                                Intent intent = getIntent();
+                                String name = intent.getStringExtra("name");
+                                if (name.equals("send")){
 
-                                startActivity(new Intent(CheckGPS.this , ConnectToReciever.class ));
-                                finish();
+                                    startActivity(new Intent(CheckGPS.this , ConnectToReciever.class ));
+                                    finish();
+
+                                }else if (name.equals("main")){
+
+                                    startActivity(new Intent(CheckGPS.this , ReceiveActivity.class ));
+                                    finish();
+
+                                }
+
                             }
                         }
 
@@ -178,6 +200,7 @@ public class CheckGPS extends AppCompatActivity {
         }
 
     }
+
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);

@@ -1,36 +1,100 @@
 package ir.hhadanooo.persianshare;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.Manifest;
+import android.app.Dialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.preference.PreferenceManager;
+import android.provider.Settings;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.Collections;
 import java.util.Objects;
 import java.util.prefs.Preferences;
 
+import ir.hhadanooo.persianshare.CheckGPS.CheckGPS;
+import ir.hhadanooo.persianshare.ConnectToReciever.ConnectToReciever;
 import ir.hhadanooo.persianshare.ContentReceive.ReceiveActivity;
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
+import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.ActivityPortalReceiver;
+import ir.hhadanooo.persianshare.ContentTransfer.PortalSender.ActivityPortalSender;
 import ir.hhadanooo.persianshare.add_friend.addFriendActivity;
 import ir.hhadanooo.persianshare.setting.settingActivity;
 
 public class MainActivity extends AppCompatActivity {
+
+    DisplayMetrics dm;
+    Dialog diaVpn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
+        //String path2 = Environment.getExternalStorageDirectory().getPath() + "/";
+        // Toast.makeText(this, ""+path2, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(this, ""+vpn(), Toast.LENGTH_SHORT).show();
+        dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+        diaVpn = new Dialog(this);
+        diaVpn.setContentView(R.layout.layout_dialog_vpn);
+        ImageView iv_warning , iv_btn;
+        TextView tv_title ,tv_message;
+        iv_warning = diaVpn.findViewById(R.id.iv_warning);
+        iv_btn = diaVpn.findViewById(R.id.iv_btn);
+        tv_title = diaVpn.findViewById(R.id.tv_title);
+        tv_message = diaVpn.findViewById(R.id.tv_message);
+
+        iv_warning.getLayoutParams().width = (int)(dm.widthPixels*.12);
+        iv_warning.getLayoutParams().height = (int)(dm.widthPixels*.12);
+
+        iv_btn.getLayoutParams().width = (int)(dm.widthPixels*.25);
+        iv_btn.getLayoutParams().height = (int)(dm.widthPixels*.09);
+
+        tv_title.setTextSize((int)(dm.widthPixels*.018));
+        tv_message.setTextSize((int)(dm.widthPixels*.014));
+
+        diaVpn.setCancelable(false);
+        Objects.requireNonNull(diaVpn.getWindow()).setLayout((int)(dm.widthPixels*.7)
+                , (int)(dm.widthPixels*.55));
+        iv_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent("android.net.vpn.SETTINGS");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivityForResult(intent , 325);
+                diaVpn.dismiss();
+            }
+        });
+        if (vpn()){
+            diaVpn.show();
+        }
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                    PackageManager.PERMISSION_GRANTED){
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+            }
+        }
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -76,7 +140,28 @@ public class MainActivity extends AppCompatActivity {
         receiveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , ReceiveActivity.class));
+                String provider = Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+                if (provider != null) {
+                    Log.i("Tat", " Location providers: " + provider);
+                    if (provider.equals("")) {
+
+                        // Toast.makeText(sendActivity.this, " Location providers: "+provider, Toast.LENGTH_SHORT).show();
+                        Intent inten = new Intent(MainActivity.this, CheckGPS.class);
+                        inten.putExtra("name" , "main");
+                        startActivity(inten);
+                    } else {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                            if (checkSelfPermission(Manifest.permission.CAMERA) !=
+                                    PackageManager.PERMISSION_GRANTED){
+                                requestPermissions(new String[]{Manifest.permission.CAMERA} , 564);
+                            }else {
+                                startActivity(new Intent(MainActivity.this , ReceiveActivity.class ));
+                            }
+                        }
+                    }
+
+                }
+
 
                 //Toast.makeText(MainActivity.this, "there is not activity ", Toast.LENGTH_SHORT).show();
             }
@@ -108,6 +193,45 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == 325 && resultCode == 0) {
+            if (vpn()){
+                diaVpn.show();
+            }
+        }
+    }
+
+    public boolean vpn() {
+        String iface = "";
+        try {
+            for (NetworkInterface networkInterface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                if (networkInterface.isUp())
+                    iface = networkInterface.getName();
+                Log.d("DEBUG", "IFACE NAME: " + iface);
+                if ( iface.contains("tun") || iface.contains("ppp") || iface.contains("pptp")) {
+                    return true;
+                }
+            }
+        } catch (SocketException e1) {
+            e1.printStackTrace();
+        }
+
+        return false;
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (!vpn()){
+            if (diaVpn.isShowing()){
+                diaVpn.dismiss();
+            }
+
+        }
+    }
 
     public void soft_key(){
         Window window = getWindow();

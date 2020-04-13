@@ -8,37 +8,130 @@
     android:layoutDirection="ltr">
 
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="#edbe00"
+        android:id="@+id/lay_size_time"
+        >
+
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:id="@+id/lay_size_all_client"
+            android:layout_height="wrap_content"
+            android:layout_weight="1">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#FFF"
+                android:text="234"
+                android:id="@+id/size_all_client"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/size_all_client"
+                android:textColor="#FFF"
+                android:text="MB"
+                android:layout_centerVertical="true"
+                android:id="@+id/text_PasSize"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/size_all_client"
+                android:layout_below="@id/text_PasSize"
+                android:textColor="#FFF"
+                android:text="Sent"
+                android:id="@+id/text_sizeSent"/>
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/lay_time_client"
+            android:layout_weight="1">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textColor="#FFF"
+                android:text="153"
+                android:id="@+id/time_client"
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/time_client"
+                android:text="Sec"
+                android:textColor="#FFF"
+                android:layout_centerVertical="true"
+                android:id="@+id/text_PasTime"/>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toEndOf="@id/time_client"
+                android:layout_below="@id/text_PasTime"
+                android:text="Left"
+                android:textColor="#FFF"
+                android:id="@+id/text_timeLeft"/>
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_Status_client"
+        android:padding="3dp"
+        android:textColor="#FFF"
+        android:layout_below="@+id/lay_size_time"
         android:layout_centerHorizontal="true"
-        android:text="ramin"
+        android:background="#edbe00"
+        android:text="Connect"
         android:textSize="25dp" />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/size_all_client"
-        android:layout_toRightOf="@id/tv_Status_client"
-        />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/time_client"
-        />
+
+
 
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/tv_Status_client">
+        android:layout_below="@id/tv_Status_client"
+        android:padding="10dp"
+        android:scrollbars="none">
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/layout_custom_item_send"
+            android:padding="15dp"
+            android:background="@drawable/border_scrollbar"
             android:orientation="vertical"
-            android:layout_below="@id/tv_Status_client">
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/tv_total_send"
+                android:textStyle="bold"
+                android:layout_gravity="left"
+                />
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spaceBelowSeek"
+                android:layout_below="@id/seek"/>
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:id="@+id/solidEndItem"
+                android:layout_below="@id/spaceBelowSeek"
+                android:layout_centerHorizontal="true"
+                android:background="#C8C7C7"/>
         </LinearLayout>
     </ScrollView>
 

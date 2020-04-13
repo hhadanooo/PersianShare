@@ -10,6 +10,7 @@
     <string name="android_6_0_or_above_requires_you_to_open_location_service_to_find_friends_nearby">Android 6.0 or above requires you to open location service to find friends nearby</string>
     <string name="open">open</string>
     <string name="next">next</string>
+    <string name="cancel">cancel</string>
 
 
     <array name="list_locate_save">

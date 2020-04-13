@@ -2,6 +2,7 @@ package ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -19,11 +20,14 @@ public class CustomItemPortal extends RelativeLayout {
     TextView tv_size;
     TextView tv_size_receive;
     SeekBar seek;
-    Button btn_cancel;
+    ImageView btn_cancel;
+    View solidEndItem ,spaceBelowSeek ,spaceLeftButton ;
+    DisplayMetrics  dm;
 
 
-    public CustomItemPortal(Context context) {
+    public CustomItemPortal(Context context , DisplayMetrics  dm) {
         super(context);
+        this.dm = dm;
         init(context);
     }
 
@@ -47,7 +51,31 @@ public class CustomItemPortal extends RelativeLayout {
         tv_size = rootview.findViewById(R.id.tv_size);
         tv_size_receive = rootview.findViewById(R.id.tv_size_receive);
         seek = rootview.findViewById(R.id.seek);
+        solidEndItem = rootview.findViewById(R.id.solidEndItem);
+        spaceBelowSeek = rootview.findViewById(R.id.spaceBelowSeek);
+        spaceLeftButton = rootview.findViewById(R.id.spaceLeftButton);
         btn_cancel = rootview.findViewById(R.id.btn_cancel);
+
+        seek.getLayoutParams().width = (int) (dm.widthPixels*.7);
+
+        img.getLayoutParams().width = (int) (dm.widthPixels*.12);
+        img.getLayoutParams().height = (int) (dm.widthPixels*.12);
+
+        tv_name.setTextSize((int) (dm.widthPixels*.015));
+        tv_size.setTextSize((int) (dm.widthPixels*.012));
+        tv_size_receive.setTextSize((int) (dm.widthPixels*.012));
+
+        btn_cancel.getLayoutParams().width = (int) (dm.widthPixels*.18);
+        btn_cancel.getLayoutParams().height = (int) (dm.widthPixels*.08);
+
+        solidEndItem.getLayoutParams().width = (int) (dm.widthPixels*.9);
+
+        spaceBelowSeek.getLayoutParams().width = (int) (dm.widthPixels*.01);
+        spaceBelowSeek.getLayoutParams().height = (int) (dm.widthPixels*.01);
+
+        spaceLeftButton.getLayoutParams().width = (int) (dm.widthPixels*.03);
+        spaceLeftButton.getLayoutParams().height = (int) (dm.widthPixels*.03);
+
         seek.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {

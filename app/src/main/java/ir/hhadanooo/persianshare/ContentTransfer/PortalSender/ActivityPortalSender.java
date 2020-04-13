@@ -7,11 +7,13 @@ import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,6 +34,7 @@ import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.ActivityPortalReceiver;
@@ -63,14 +66,20 @@ public class ActivityPortalSender extends AppCompatActivity {
     TextView tv_size_all;
     int count_all= 0 ;
     Handler handler_timer;
-    TextView tv_time;
+    TextView tv_time , text_PasSize , text_sizeSent ,  text_PasTime , text_timeLeft ,tv_total_send;
     Runnable run_time;
+    DisplayMetrics dm;
+    RelativeLayout lay_tv_time_server , lay_tv_size_all_server;
+    View solidEndItem , spaceBelowSeek;
 
     boolean check_time = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_portal_sender);
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         init();
         fileList = new ArrayList<>();
         pathList = new ArrayList<>();
@@ -102,11 +111,24 @@ public class ActivityPortalSender extends AppCompatActivity {
 
         handler.postDelayed(new run_connecting(),100);
 
+
+
     }
 
     public void init()
     {
         linearLayout_custom_item = findViewById(R.id.layout_custom_item_send);
+
+        text_PasSize = findViewById(R.id.text_PasSize);
+        text_sizeSent = findViewById(R.id.text_sizeSent);
+        text_PasTime = findViewById(R.id.text_PasTime);
+        text_timeLeft = findViewById(R.id.text_timeLeft);
+        tv_total_send = findViewById(R.id.tv_total_send);
+
+        lay_tv_time_server = findViewById(R.id.lay_tv_time_server);
+        lay_tv_size_all_server = findViewById(R.id.lay_tv_size_all_server);
+        solidEndItem = findViewById(R.id.solidEndItem);
+        spaceBelowSeek = findViewById(R.id.spaceBelowSeek);
 
         tv_status = findViewById(R.id.tv_Status_client);
         socket = new Socket();
@@ -116,6 +138,27 @@ public class ActivityPortalSender extends AppCompatActivity {
         handler_timer = new Handler();
         tv_time = findViewById(R.id.time_client);
         run_time = new Timer();
+
+        lay_tv_time_server.getLayoutParams().height = (int) (dm.widthPixels*.2);
+        lay_tv_size_all_server.getLayoutParams().height = (int) (dm.widthPixels*.2);
+
+        tv_size_all.setTextSize((int) (dm.widthPixels*.05));
+
+        tv_time.setTextSize((int) (dm.widthPixels*.05));
+
+        text_PasSize.setTextSize((int) (dm.widthPixels*.009));
+        text_sizeSent.setTextSize((int) (dm.widthPixels*.009));
+        text_PasTime.setTextSize((int) (dm.widthPixels*.009));
+        text_timeLeft.setTextSize((int) (dm.widthPixels*.009));
+
+        solidEndItem.getLayoutParams().width = (int) (dm.widthPixels*.9);
+
+        spaceBelowSeek.getLayoutParams().width = (int) (dm.widthPixels*.01);
+        spaceBelowSeek.getLayoutParams().height = (int) (dm.widthPixels*.01);
+
+        tv_total_send.setText("File  (4/5)");
+        tv_total_send.setTextSize((int) (dm.widthPixels*.013));
+
     }
     public class Async_connect extends AsyncTask<String,String,String>
     {
@@ -194,7 +237,7 @@ public class ActivityPortalSender extends AppCompatActivity {
                 {
                     size_all_file+= f.length();
                     NumSize += f.getName() + ":" + f.length() + "!";
-                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalSender.this);
+                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalSender.this , dm);
                     custom_item.SetText_name(f.getName());
                     custom_item.SetText_size(String.valueOf(f.length()));
                     custom_item.SetMaxValue((int) f.length());

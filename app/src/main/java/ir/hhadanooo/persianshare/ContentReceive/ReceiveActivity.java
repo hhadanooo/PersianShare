@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.net.Uri;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
@@ -12,7 +13,12 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -21,6 +27,7 @@ import com.google.zxing.WriterException;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.lang.reflect.Method;
+import java.util.Objects;
 
 import androidmads.library.qrgenearator.QRGContents;
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -35,6 +42,11 @@ public class ReceiveActivity extends AppCompatActivity {
     public static final String HOTSPOT_NAME = "AndroidShare_2580";
     public static final String HOTSPOT_PASSWORD = "25802580";
 
+    DisplayMetrics dm;
+    TextView help_barcode_connect_receiver , help_text_connect_receiver;
+
+    View view_top_tv_barcode , view_top_barcode , view_top_view_center , view_top_tv_receive;
+
     Handler handler;
     boolean check = false;
     @Override
@@ -42,8 +54,50 @@ public class ReceiveActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
 
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.TRANSPARENT);
+        window.setNavigationBarColor(Color.TRANSPARENT);
+
+        dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
         img_barcode = findViewById(R.id.img_barcode_receive);
         tv_name_wifi = findViewById(R.id.tv_name_wifi_receive);
+        help_barcode_connect_receiver = findViewById(R.id.help_barcode_connect_receiver);
+        help_text_connect_receiver = findViewById(R.id.help_text_connect_receiver);
+        view_top_tv_barcode = findViewById(R.id.view_top_tv_barcode);
+        view_top_barcode = findViewById(R.id.view_top_barcode);
+        view_top_view_center = findViewById(R.id.view_top_view_center);
+        view_top_tv_receive = findViewById(R.id.view_top_tv_receive);
+
+        help_barcode_connect_receiver.setTextSize((int)(dm.widthPixels*0.015));
+
+
+
+        //tv_name_wifi.getLayoutParams().width = (int)(dm.widthPixels*0.55);
+        //tv_name_wifi.getLayoutParams().height = (int)(dm.widthPixels*0.11);
+        tv_name_wifi.setTextSize((int)(dm.widthPixels*0.017));
+
+
+        img_barcode.getLayoutParams().width = (int)(dm.widthPixels*0.58);
+        img_barcode.getLayoutParams().height = (int)(dm.widthPixels*0.58);
+
+        /*view_center.getLayoutParams().width = (int)(dm.widthPixels*0.85);
+        view_center.getLayoutParams().height = (int)(dm.widthPixels*0.00001);*/
+
+        help_text_connect_receiver.setTextSize((int)(dm.widthPixels*0.015));
+
+        view_top_tv_barcode.getLayoutParams().height = (int)(dm.widthPixels*0.1);
+
+        view_top_barcode.getLayoutParams().height = (int)(dm.widthPixels*0.1);
+
+        view_top_view_center.getLayoutParams().height = (int)(dm.widthPixels*0.1);
+
+        view_top_tv_receive.getLayoutParams().height = (int)(dm.widthPixels*0.1);
+
+
+
         handler = new Handler();
 
         TurnOnHotspot();
@@ -196,14 +250,14 @@ public class ReceiveActivity extends AppCompatActivity {
         if(check)
         {
             qrgEncoder = new QRGEncoder(HOTSPOT_NAME + ":" + HOTSPOT_PASSWORD
-                    ,null, QRGContents.Type.TEXT,250);
+                    ,null, QRGContents.Type.TEXT,300);
 
         }else {
             qrgEncoder = new QRGEncoder(HOTSPOT_NAME + ":" + HOTSPOT_PASSWORD
-                    ,null, QRGContents.Type.TEXT,250);
+                    ,null, QRGContents.Type.TEXT,300);
 
         }
-        tv_name_wifi.setText(HOTSPOT_NAME + "\n" + HOTSPOT_PASSWORD);
+        tv_name_wifi.setText(HOTSPOT_NAME+HOTSPOT_PASSWORD);
 
 
         try {

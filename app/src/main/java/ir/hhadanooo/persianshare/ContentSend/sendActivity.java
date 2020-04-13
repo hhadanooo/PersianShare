@@ -142,7 +142,9 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
                             if (provider.equals("")) {
 
                                 // Toast.makeText(sendActivity.this, " Location providers: "+provider, Toast.LENGTH_SHORT).show();
-                                startActivity(new Intent(sendActivity.this, CheckGPS.class));
+                                Intent inten = new Intent(sendActivity.this, CheckGPS.class);
+                                inten.putExtra("name" , "send");
+                                startActivity(inten);
                             } else {
                                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
                                     if (checkSelfPermission(Manifest.permission.CAMERA) !=
