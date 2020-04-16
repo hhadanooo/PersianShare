@@ -71,6 +71,8 @@ public class SlideAppPicker extends Fragment{
 
         final boolean HidenApp = pref_setting.getBoolean("Show_default_apps" , true);
         for (int i = 0 ; i < apps.size() ; i++) {
+
+
             boolean repeat = false;
             ResolveInfo packageInfo = apps.get(i);
 
@@ -134,16 +136,11 @@ public class SlideAppPicker extends Fragment{
                 final int finalIndex = index;
                 final int finalI = i;
                 final String finalPackageName = packageName;
-                new Thread(new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            icons[finalI - finalIndex] = getActivity().getPackageManager().getApplicationIcon(finalPackageName);
-                        } catch (PackageManager.NameNotFoundException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                }).start();
+                try {
+                    icons[finalI - finalIndex] = getActivity().getPackageManager().getApplicationIcon(finalPackageName);
+                } catch (PackageManager.NameNotFoundException e) {
+                    e.printStackTrace();
+                }
 
 
                 //Drawable icon = getResources().getDrawable(R.drawable.add_friend);

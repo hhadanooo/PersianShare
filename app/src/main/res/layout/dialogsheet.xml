@@ -30,15 +30,7 @@
             android:id="@+id/tv_size_length_bottom_sheet"
             />
 
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"
-            android:layout_margin="10dp"
-            android:background="@drawable/deleteicon"
-            android:id="@+id/iv_delete_all_bottom_sheet"
-            />
+
 
     </RelativeLayout>
 

@@ -113,7 +113,7 @@ public class ActivityPortalReceiver extends AppCompatActivity {
         //final String[] sp = s[z].split(":");
 
         for (int i = 0 ; i < 15 ; i++){
-            final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this  , dm);
+            final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this  , dm,0);
 
             custom_item.SetText_name("hhadnooo");
             String str = "hadan";
@@ -305,7 +305,7 @@ public class ActivityPortalReceiver extends AppCompatActivity {
                                 for(int z = 0;z<s.length;z++)
                                 {
                                     final String[] sp = s[z].split(":");
-                                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this , dm);
+                                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalReceiver.this , dm,0);
 
                                     custom_item.SetText_name(sp[0]);
                                     String str = sp[1];

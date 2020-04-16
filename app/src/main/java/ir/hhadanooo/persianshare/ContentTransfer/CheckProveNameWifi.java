@@ -62,7 +62,6 @@ public class CheckProveNameWifi extends AppCompatActivity {
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(CheckProveNameWifi.this, "ramin", Toast.LENGTH_SHORT).show();
                         check_connecting = true;
 
                     }

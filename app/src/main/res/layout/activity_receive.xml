@@ -1,72 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:orientation="vertical"
     android:layout_height="match_parent"
     tools:context=".MainActivity"
-    android:background="@drawable/backconnect"
+    android:id="@+id/rel"
     >
 
-    <View
+
+    <LinearLayout
+        android:id="@+id/ley_receiver"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/view_top_tv_barcode"
-        />
+        android:layout_height="match_parent"
+        android:background="@drawable/backconnect"
+        android:orientation="vertical">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:text="QRCode for connect"
-        android:id="@+id/help_barcode_connect_receiver"/>
 
-    <View
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/view_top_tv_barcode"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="QRCode for connect"
+            android:id="@+id/help_barcode_connect_receiver"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/view_top_barcode"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scaleType="fitXY"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/img_barcode_receive"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/view_top_view_center"
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Text for connect"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/help_text_connect_receiver"/>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/view_top_tv_receive"
+            />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/tv_name_wifi_receive"
+            android:textColor="@color/colorAccent"
+            android:padding="10dp"/>
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:visibility="gone"
+        android:id="@+id/ley_portal_receiver"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/view_top_barcode"
-        />
+        android:layout_height="match_parent"
+        android:layoutDirection="ltr"
+        android:background="#CDCCCC">
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:scaleType="fitXY"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/img_barcode_receive"/>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="#edbe00"
+            android:id="@+id/lay_size_time"
+            >
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/view_top_view_center"
-        />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Text for connect"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/help_text_connect_receiver"/>
-
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/view_top_tv_receive"
-        />
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:id="@+id/lay_tv_size_all_server"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
 
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:id="@+id/tv_name_wifi_receive"
-        android:textColor="@color/colorAccent"
-        android:padding="10dp"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="#FFF"
+                    android:id="@+id/tv_size_all_server"
+                    />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tv_size_all_server"
+                    android:textColor="#FFF"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/text_PasSize"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tv_size_all_server"
+                    android:layout_below="@id/text_PasSize"
+                    android:textColor="#FFF"
+                    android:text="Received"
+                    android:id="@+id/text_sizeReceived"/>
+
+            </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:id="@+id/lay_tv_time_server"
+                android:layout_weight="1">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:textColor="#FFF"
+                    android:id="@+id/tv_time_server"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tv_time_server"
+                    android:text="Sec"
+                    android:textColor="#FFF"
+                    android:layout_centerVertical="true"
+                    android:id="@+id/text_PasTime"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toEndOf="@id/tv_time_server"
+                    android:layout_below="@id/text_PasTime"
+                    android:text="Left"
+                    android:textColor="#FFF"
+                    android:id="@+id/text_timePassed"/>
+
+            </RelativeLayout>
+
+        </LinearLayout>
 
 
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_status_receive"
+            android:padding="3dp"
+            android:textColor="#FFF"
+            android:layout_below="@+id/lay_size_time"
+            android:layout_centerHorizontal="true"
+            android:background="#edbe00"
+            android:textSize="25dp"/>
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_status_receive"
+            android:padding="10dp"
+            android:scrollbars="none"
+
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/lin"
+                android:padding="15dp"
+                android:background="@drawable/border_scrollbar"
+                android:orientation="vertical">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tv_total_send"
+                    android:textStyle="bold"
+                    android:layout_gravity="left"
+                    />
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/spaceBelowSeek"
+                    android:layout_below="@id/seek"/>
+                <View
+                    android:layout_width="wrap_content"
+                    android:layout_height="1dp"
+                    android:id="@+id/solidEndItem"
+                    android:layout_below="@id/spaceBelowSeek"
+                    android:layout_centerHorizontal="true"
+                    android:background="#C8C7C7"/>
+            </LinearLayout>
+
+        </ScrollView>
+    </RelativeLayout>
+
+
+
+
+
+
+
+
+</RelativeLayout>

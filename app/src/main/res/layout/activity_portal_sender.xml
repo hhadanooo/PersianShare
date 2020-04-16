@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ContentTransfer.PortalSender.ActivityPortalSender"
-    android:layoutDirection="ltr">
+    android:layoutDirection="ltr"
+    android:background="#CDCCCC">
 
 
     <LinearLayout
@@ -26,7 +27,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="#FFF"
-                android:text="234"
                 android:id="@+id/size_all_client"
                 />
             <TextView
@@ -34,7 +34,6 @@
                 android:layout_height="wrap_content"
                 android:layout_toEndOf="@id/size_all_client"
                 android:textColor="#FFF"
-                android:text="MB"
                 android:layout_centerVertical="true"
                 android:id="@+id/text_PasSize"/>
             <TextView
@@ -58,7 +57,6 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:textColor="#FFF"
-                android:text="153"
                 android:id="@+id/time_client"
                 />
 
@@ -94,7 +92,6 @@
         android:layout_below="@+id/lay_size_time"
         android:layout_centerHorizontal="true"
         android:background="#edbe00"
-        android:text="Connect"
         android:textSize="25dp" />
 
 

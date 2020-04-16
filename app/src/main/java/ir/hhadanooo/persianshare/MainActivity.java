@@ -52,6 +52,9 @@ public class MainActivity extends AppCompatActivity {
         //String path2 = Environment.getExternalStorageDirectory().getPath() + "/";
         // Toast.makeText(this, ""+path2, Toast.LENGTH_SHORT).show();
         //Toast.makeText(this, ""+vpn(), Toast.LENGTH_SHORT).show();
+
+
+
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         diaVpn = new Dialog(this);
@@ -90,11 +93,16 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                    PackageManager.PERMISSION_GRANTED){
-                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+            if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE  ) !=
+                    PackageManager.PERMISSION_GRANTED  ){
+                requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE  } , 564);
+            }
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
+                    PackageManager.PERMISSION_GRANTED  ){
+                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
             }
         }
+
 
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -132,7 +140,22 @@ public class MainActivity extends AppCompatActivity {
         sendButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , sendActivity.class));
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                            PackageManager.PERMISSION_GRANTED){
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+                    }else {
+                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
+                                PackageManager.PERMISSION_GRANTED  ){
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
+                        }else {
+                            startActivity(new Intent(MainActivity.this , sendActivity.class));
+                        }
+
+                    }
+                }
+
+
 
             }
         });
@@ -151,11 +174,13 @@ public class MainActivity extends AppCompatActivity {
                         startActivity(inten);
                     } else {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                            if (checkSelfPermission(Manifest.permission.CAMERA) !=
+                            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) !=
                                     PackageManager.PERMISSION_GRANTED){
-                                requestPermissions(new String[]{Manifest.permission.CAMERA} , 564);
+                                requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION} , 564);
                             }else {
+
                                 startActivity(new Intent(MainActivity.this , ReceiveActivity.class ));
+
                             }
                         }
                     }

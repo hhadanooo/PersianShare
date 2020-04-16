@@ -1,6 +1,8 @@
 package ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.net.Uri;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.MotionEvent;
@@ -10,7 +12,15 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
+import java.io.File;
+import java.io.IOException;
+
+import ir.hhadanooo.persianshare.ContentReceive.ReceiveActivity;
+import ir.hhadanooo.persianshare.ContentTransfer.PortalSender.ActivityPortalSender;
 import ir.hhadanooo.persianshare.R;
 
 public class CustomItemPortal extends RelativeLayout {
@@ -20,13 +30,24 @@ public class CustomItemPortal extends RelativeLayout {
     TextView tv_size;
     TextView tv_size_receive;
     SeekBar seek;
-    ImageView btn_cancel;
+    String sizeFile;
+
     View solidEndItem ,spaceBelowSeek ,spaceLeftButton ;
     DisplayMetrics  dm;
+    ImageView btn_cancel;
+    boolean bool_cancel = false;
+    int num = 0;
+    int check = 0;
 
-
-    public CustomItemPortal(Context context , DisplayMetrics  dm) {
+    public CustomItemPortal(Context context) {
         super(context);
+
+        init(context);
+    }
+
+    public CustomItemPortal(Context context , DisplayMetrics  dm,int check) {
+        super(context);
+        this.check = check;
         this.dm = dm;
         init(context);
     }
@@ -43,7 +64,7 @@ public class CustomItemPortal extends RelativeLayout {
 
 
 
-    public void init(Context context)
+    public void init(final Context context)
     {
         rootview = inflate(context,R.layout.layout_custom_item_portal,this);
         img = rootview.findViewById(R.id.img);
@@ -61,7 +82,7 @@ public class CustomItemPortal extends RelativeLayout {
         img.getLayoutParams().width = (int) (dm.widthPixels*.12);
         img.getLayoutParams().height = (int) (dm.widthPixels*.12);
 
-        tv_name.setTextSize((int) (dm.widthPixels*.015));
+        tv_name.setTextSize((int) (dm.widthPixels*.013));
         tv_size.setTextSize((int) (dm.widthPixels*.012));
         tv_size_receive.setTextSize((int) (dm.widthPixels*.012));
 
@@ -76,21 +97,147 @@ public class CustomItemPortal extends RelativeLayout {
         spaceLeftButton.getLayoutParams().width = (int) (dm.widthPixels*.03);
         spaceLeftButton.getLayoutParams().height = (int) (dm.widthPixels*.03);
 
+
+
+
+
+
+
+
         seek.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 return true;
             }
         });
+        btn_cancel.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                btn_cancel.setEnabled(false);
+                btn_cancel.setBackground(context.getDrawable(R.drawable.btncancelled));
+
+
+                if(check == 1)
+                {
+                    ReceiveActivity.list_item.get(num).SetBoolCancel(true);
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String st = "rererrefsdfdsf@"+"canceled:" + num;
+                                ReceiveActivity.outputStream_cancel.write(st.getBytes());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    thread.start();
+                }else if (check == 2)
+                {
+                    ActivityPortalSender.list_custom.get(num).SetBoolCancel(true);
+
+                    Thread thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                String st = "rererrefsdfdsf@"+"canceled:" + num;
+                                ActivityPortalSender.outputStream_cancel.write(st.getBytes());
+                            } catch (IOException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    });
+                    thread.start();
+                }
+
+
+
+
+
+
+
+
+            }
+        });
     }
     public void SetText_name(String text)
     {
-        tv_name.setText(text);
+        if (text.contains(".") && (text.endsWith(".jpg") ||
+                text.endsWith(".JPG") ||
+                text.endsWith(".png") ||
+                text.endsWith(".PNG") ||
+                text.endsWith(".webp") ||
+                text.endsWith(".jpeg") ||
+                text.endsWith(".JPEG")
+        )) {
+
+            img.setImageResource(R.drawable.iconimg);
+
+
+        }else if (text.contains(".") && (text.endsWith(".mp4") ||
+                text.endsWith(".MP4") ||
+                text.endsWith(".mkv")
+        )) {
+
+            img.setImageResource(R.drawable.iconmovi);
+
+
+        }else if (text.contains(".") && (text.endsWith(".mp3") ||
+                text.endsWith(".MP3") ||
+                text.endsWith(".ogg")
+        )){
+            img.setImageResource(R.drawable.icon_m);
+        }else {
+            img.setImageResource(R.drawable.doc_icon2);
+        }
+
+
+
+        String nameFile = text;
+        String endName;
+
+        if (nameFile.length() > 20){
+            endName = nameFile.substring(nameFile.length()-7);
+
+            String startName = nameFile.substring(0 ,7 );
+
+            tv_name.setText(startName+" ... "+endName);
+        }else {
+            tv_name.setText(nameFile);
+        }
+
+
+
     }
     public void SetText_size(String text)
     {
-        tv_size.setText(text);
+        sizeFile = text;
+        String sizeFile;
+        float sizeByte = Float.parseFloat(text);
+        sizeByte = sizeByte/1024/1024/1024;
+        if (sizeByte < 1.0){
+            sizeByte = sizeByte*1024;
+            if (sizeByte < 1.0){
+                sizeByte = sizeByte*1024;
+                @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+                sizeFile = size+" KB";
+            }else {
+                @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+
+                sizeFile = size+" MB";
+            }
+        }else {
+            @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+
+            sizeFile = size+" GB";
+        }
+
+
+        tv_size.setText(sizeFile);
     }
+
+
     public void SetText_size_receive(String text)
     {
 
@@ -103,11 +250,14 @@ public class CustomItemPortal extends RelativeLayout {
         }
         tv_size_receive.setText(t+"%");
 
-
+    }
+    public ImageView GetButton()
+    {
+        return btn_cancel;
     }
     public String GetSize()
     {
-        return tv_size.getText().toString().trim();
+        return sizeFile;
     }
     public String GetSize_receive()
     {
@@ -119,6 +269,27 @@ public class CustomItemPortal extends RelativeLayout {
     }
 
     public void SetProgress(int progress) {seek.setProgress(progress);}
+
+    public void SetBoolCancel(boolean bool_cancel)
+    {
+        this.bool_cancel = bool_cancel;
+    }
+    public boolean GetBoolCancel()
+    {
+        return this.bool_cancel;
+    }
+
+
+    public void SetNum(int num)
+    {
+        this.num = num;
+    }
+    public int GetNum()
+    {
+        return this.num;
+    }
+
+
 
 
 

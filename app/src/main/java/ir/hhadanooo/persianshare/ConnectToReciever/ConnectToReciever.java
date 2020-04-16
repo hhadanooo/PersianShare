@@ -25,23 +25,22 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.gms.vision.CameraSource;
-import com.google.android.gms.vision.Detector;
-import com.google.android.gms.vision.barcode.Barcode;
-import com.google.android.gms.vision.barcode.BarcodeDetector;
+
+import com.google.zxing.Result;
 
 import java.io.IOException;
 import java.util.Objects;
 
 import ir.hhadanooo.persianshare.CheckGPS.CheckGPS;
+import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.ContentTransfer.CheckProveNameWifi;
 import ir.hhadanooo.persianshare.R;
+import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
-public class ConnectToReciever extends AppCompatActivity {
+public class ConnectToReciever extends AppCompatActivity implements ZXingScannerView.ResultHandler {
 
-    SurfaceView barcode;
-    BarcodeDetector barcodeDetector;
-    CameraSource cameraSource;
+    ZXingScannerView barcode;
+
     DisplayMetrics dm;
     TextView help_scan_connect_receiver , help_write_connect_receiver;
     EditText et_enter_pass_name;
@@ -59,11 +58,16 @@ public class ConnectToReciever extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
 
+        //Toast.makeText(this, ""+ sendActivity.list, Toast.LENGTH_SHORT).show();
+
+
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         help_scan_connect_receiver = findViewById(R.id.help_scan_connect_receiver);
         barcode = findViewById(R.id.barcode);
+        barcode.setResultHandler(this);
+        barcode.startCamera();
         //view_center = findViewById(R.id.view_center);
         help_write_connect_receiver = findViewById(R.id.help_write_connect_receiver);
         et_enter_pass_name = findViewById(R.id.et_enter_pass_name);
@@ -82,8 +86,8 @@ public class ConnectToReciever extends AppCompatActivity {
 
 
 
-        barcode.getLayoutParams().width = (int)(dm.widthPixels*0.55);
-        barcode.getLayoutParams().height = (int)(dm.widthPixels*0.55);
+        barcode.getLayoutParams().width = (int)(dm.widthPixels*0.7);
+        barcode.getLayoutParams().height = (int)(dm.widthPixels*0.7);
 
         /*view_center.getLayoutParams().width = (int)(dm.widthPixels*0.85);
         view_center.getLayoutParams().height = (int)(dm.widthPixels*0.00001);*/
@@ -116,26 +120,26 @@ public class ConnectToReciever extends AppCompatActivity {
 
 
 
-                        Toast.makeText(ConnectToReciever.this, "16", Toast.LENGTH_SHORT).show();
-                        WifiConfiguration wifiConfig = new WifiConfiguration();
-                        wifiConfig.SSID = String.format("\"%s\"","AndroidShare_"+ name);
-                        wifiConfig.preSharedKey = String.format("\"%s\"", pass);
+                    Toast.makeText(ConnectToReciever.this, "16", Toast.LENGTH_SHORT).show();
+                    WifiConfiguration wifiConfig = new WifiConfiguration();
+                    wifiConfig.SSID = String.format("\"%s\"","AndroidShare_"+ name);
+                    wifiConfig.preSharedKey = String.format("\"%s\"", pass);
 
 
-                        WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-                        if (!wifiManager.isWifiEnabled()){
-                            wifiManager.setWifiEnabled(true);
-                        }
-                        wifiManager.disconnect();
-                        int netId = wifiManager.addNetwork(wifiConfig);
+                    WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+                    if (!wifiManager.isWifiEnabled()){
+                        wifiManager.setWifiEnabled(true);
+                    }
+                    wifiManager.disconnect();
+                    int netId = wifiManager.addNetwork(wifiConfig);
 
-                        wifiManager.enableNetwork(netId, true);
-                        wifiManager.reconnect();
+                    wifiManager.enableNetwork(netId, true);
+                    wifiManager.reconnect();
 
-                        Intent intent =new Intent(ConnectToReciever.this, CheckProveNameWifi.class);
-                        intent.putExtra("WifiName","AndroidShare_"+ name);
-                        startActivity(intent);
-                        finish();
+                    Intent intent =new Intent(ConnectToReciever.this, CheckProveNameWifi.class);
+                    intent.putExtra("WifiName","AndroidShare_"+ name);
+                    startActivity(intent);
+                    finish();
 
 
 
@@ -150,129 +154,95 @@ public class ConnectToReciever extends AppCompatActivity {
         });
 
 
-        barcodeDetector = new BarcodeDetector.Builder(this)
-                .setBarcodeFormats(Barcode.QR_CODE).build();
 
 
+    }
 
-        cameraSource = new CameraSource.Builder(this , barcodeDetector)
-                .setRequestedPreviewSize(768 , 1366
+    @Override
+    protected void onPause() {
+        super.onPause();
+        barcode.stopCamera();
+    }
 
-                ).setAutoFocusEnabled(true)
-                .build();
+    @Override
+    public void handleResult(Result rawResult) {
 
-        barcode.getHolder().addCallback(new SurfaceHolder.Callback() {
-            @Override
-            public void surfaceCreated(SurfaceHolder holder) {
-                try {
-                    cameraSource.start(holder);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+        final String nameWifi = rawResult.getText();
 
-            @Override
-            public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
-
-            }
-
-            @Override
-            public void surfaceDestroyed(SurfaceHolder holder) {
-                cameraSource.stop();
-            }
-        });
-
-        barcodeDetector.setProcessor(new Detector.Processor<Barcode>() {
-            @Override
-            public void release() {
-
-            }
-
-            @Override
-            public void receiveDetections(Detector.Detections<Barcode> detections) {
-                final SparseArray<Barcode> qrcode = detections.getDetectedItems();
-
-                if (qrcode.size() != 0){
-                    new Thread(new Runnable() {
+        if (rawResult.getText().length() != 0){
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
 
-                                    if(!check)
-                                    {
-                                        check = true;
-                                        String[] s = qrcode.valueAt(0).displayValue.split(":");
-                                        ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
-                                        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-                                        if(s.length == 2)
-                                        {
+                            if(!check)
+                            {
+                                barcode.setVisibility(View.INVISIBLE);
+                                check = true;
+                                String[] s = nameWifi.split(":");
+                                ConnectivityManager connManager = (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
+                                NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
+                                if(s.length == 2)
+                                {
+                                    WifiConfiguration wifiConfig = new WifiConfiguration();
+                                    wifiConfig.SSID = String.format("\"%s\"", s[0]);
+                                    wifiConfig.preSharedKey = String.format("\"%s\"", s[1]);
+                                    //wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
 
-                                            WifiConfiguration wifiConfig = new WifiConfiguration();
-                                            wifiConfig.SSID = String.format("\"%s\"", s[0]);
-                                            wifiConfig.preSharedKey = String.format("\"%s\"", s[1]);
-                                            //wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-
-                                            WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-                                            if (!wifiManager.isWifiEnabled()){
-                                                wifiManager.setWifiEnabled(true);
-                                            }
-                                            wifiManager.disconnect();
-                                            int netId = wifiManager.addNetwork(wifiConfig);
-                                            //Toast.makeText(ConnectToReciever.this, ""+s[0], Toast.LENGTH_SHORT).show();
-
-                                            wifiManager.enableNetwork(netId, true);
-                                            wifiManager.reconnect();
-
-                                            Intent intent =new Intent(ConnectToReciever.this, CheckProveNameWifi.class);
-                                            intent.putExtra("WifiName",s[0]);
-                                            startActivity(intent);
-                                            finish();
-
-
-                                        }else {
-
-                                            WifiConfiguration wifiConfig = new WifiConfiguration();
-                                            wifiConfig.SSID = String.format("\"%s\"", s[0]);
-
-                                            wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
-
-                                            WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-                                            if (!wifiManager.isWifiEnabled()){
-                                                wifiManager.setWifiEnabled(true);
-                                            }
-                                            wifiManager.disconnect();
-                                            int netId = wifiManager.addNetwork(wifiConfig);
-                                            // Toast.makeText(ConnectToReciever.this, ""+s[0], Toast.LENGTH_SHORT).show();
-
-                                            wifiManager.enableNetwork(netId, true);
-                                            wifiManager.reconnect();
-                                            if (mWifi.isConnected()) {
-                                                WifiManager wifiName = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
-                                                if (wifiName.getConnectionInfo().getBSSID().equals(s[0])){
-                                                    startActivity(new Intent(ConnectToReciever.this , CheckGPS.class));
-                                                    ;                                                Toast.makeText(ConnectToReciever.this, "connect", Toast.LENGTH_SHORT).show();
-                                                }
-                                            }else{
-                                                //Toast.makeText(ConnectToReciever.this, "pass is false", Toast.LENGTH_SHORT).show();
-                                            }
-                                        }
-
+                                    WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+                                    if (!wifiManager.isWifiEnabled()){
+                                        wifiManager.setWifiEnabled(true);
                                     }
+                                    wifiManager.disconnect();
+                                    int netId = wifiManager.addNetwork(wifiConfig);
+                                    //Toast.makeText(ConnectToReciever.this, ""+s[0], Toast.LENGTH_SHORT).show();
+
+                                    wifiManager.enableNetwork(netId, true);
+                                    wifiManager.reconnect();
+
+                                    Intent intent =new Intent(ConnectToReciever.this, CheckProveNameWifi.class);
+                                    intent.putExtra("WifiName",s[0]);
+                                    startActivity(intent);
+                                    finish();
 
 
-                                    //Toast.makeText(ConnectToReciever.this, ""+qrcode.valueAt(0).displayValue, Toast.LENGTH_SHORT).show();
+                                }else {
+
+                                    WifiConfiguration wifiConfig = new WifiConfiguration();
+                                    wifiConfig.SSID = String.format("\"%s\"", s[0]);
+
+                                    wifiConfig.allowedKeyManagement.set(WifiConfiguration.KeyMgmt.NONE);
+
+                                    WifiManager wifiManager = (WifiManager)getApplicationContext().getSystemService(WIFI_SERVICE);
+                                    if (!wifiManager.isWifiEnabled()){
+                                        wifiManager.setWifiEnabled(true);
+                                    }
+                                    wifiManager.disconnect();
+                                    int netId = wifiManager.addNetwork(wifiConfig);
+                                    // Toast.makeText(ConnectToReciever.this, ""+s[0], Toast.LENGTH_SHORT).show();
+
+                                    wifiManager.enableNetwork(netId, true);
+                                    wifiManager.reconnect();
+
+                                    Intent intent =new Intent(ConnectToReciever.this, CheckProveNameWifi.class);
+                                    intent.putExtra("WifiName",s[0]);
+                                    startActivity(intent);
+                                    finish();
                                 }
-                            });
 
+                            }
+
+
+                            //Toast.makeText(ConnectToReciever.this, ""+qrcode.valueAt(0).displayValue, Toast.LENGTH_SHORT).show();
                         }
-                    }).start();
+                    });
 
                 }
-            }
-        });
+            }).start();
 
+        }
 
     }
 }

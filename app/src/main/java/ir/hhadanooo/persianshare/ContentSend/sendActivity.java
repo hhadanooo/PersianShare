@@ -12,6 +12,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
+import android.media.Image;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
@@ -27,6 +28,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton;
 import com.google.android.material.tabs.TabLayout;
@@ -105,6 +107,8 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
 
 
 
+
+
         tabLayout = findViewById(R.id.tabLayout);
 
         tabLayout.getLayoutParams().height = (int)(dm.widthPixels*0.15);
@@ -177,20 +181,9 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
 
                     TextView tv_selected_bottom_sheet = parentView.findViewById(R.id.tv_selected_bottom_sheet);
                     TextView tv_size_length_bottom_sheet = parentView.findViewById(R.id.tv_size_length_bottom_sheet);
-                    ImageView iv_delete_all_bottom_sheet = parentView.findViewById(R.id.iv_delete_all_bottom_sheet);
 
 
-                    iv_delete_all_bottom_sheet.getLayoutParams().height = (int) (dm.widthPixels * 0.1);
-                    iv_delete_all_bottom_sheet.getLayoutParams().width = (int) (dm.widthPixels * 0.1);
-                    iv_delete_all_bottom_sheet.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                      /*  SlideAppPicker slideAppPicker = new SlideAppPicker();
-                        slideAppPicker.resetList();
-                        list.clear();
-                        bottomSheerDialog.hide();*/
-                        }
-                    });
+
 
                     listFile = new ArrayList<>();
                     prepareData();

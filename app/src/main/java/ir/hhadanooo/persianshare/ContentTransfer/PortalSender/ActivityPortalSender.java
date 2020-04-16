@@ -4,7 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 
+import android.content.pm.ApplicationInfo;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.DisplayMetrics;
@@ -30,6 +36,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.InetSocketAddress;
+import java.net.ServerSocket;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -72,6 +79,23 @@ public class ActivityPortalSender extends AppCompatActivity {
     RelativeLayout lay_tv_time_server , lay_tv_size_all_server;
     View solidEndItem , spaceBelowSeek;
 
+
+    public static List<CustomItemPortal> list_custom;
+    ServerSocket serverSocket_cancel;
+    public static Socket socket_cancel;
+    public static InputStream inputStream_cancel;
+    public static OutputStream outputStream_cancel;
+    Handler handler_cancel;
+    boolean check_cancel;
+    int int_cancel;
+    int int_cancel1;
+    int i = 0;
+    boolean check_start = false;
+
+    int total_all ,total_received;
+
+    boolean Confirmation_send = false;
+
     boolean check_time = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,20 +107,19 @@ public class ActivityPortalSender extends AppCompatActivity {
         init();
         fileList = new ArrayList<>();
         pathList = new ArrayList<>();
-        /*File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/socket");
-        File[] files = file.listFiles();
-        for(File s:files)
-        {
-            fileList.add(s);
-        }
 
-         */
         List<String> list = sendActivity.list;
+
+
+
 
         for(String s:list)
         {
+
+
             File file = new File(s);
             fileList.add(file);
+
         }
 
 
@@ -117,6 +140,7 @@ public class ActivityPortalSender extends AppCompatActivity {
 
     public void init()
     {
+        list_custom = new ArrayList<>();
         linearLayout_custom_item = findViewById(R.id.layout_custom_item_send);
 
         text_PasSize = findViewById(R.id.text_PasSize);
@@ -125,8 +149,8 @@ public class ActivityPortalSender extends AppCompatActivity {
         text_timeLeft = findViewById(R.id.text_timeLeft);
         tv_total_send = findViewById(R.id.tv_total_send);
 
-        lay_tv_time_server = findViewById(R.id.lay_tv_time_server);
-        lay_tv_size_all_server = findViewById(R.id.lay_tv_size_all_server);
+        lay_tv_time_server = findViewById(R.id.lay_time_client);
+        lay_tv_size_all_server = findViewById(R.id.lay_size_all_client);
         solidEndItem = findViewById(R.id.solidEndItem);
         spaceBelowSeek = findViewById(R.id.spaceBelowSeek);
 
@@ -142,9 +166,9 @@ public class ActivityPortalSender extends AppCompatActivity {
         lay_tv_time_server.getLayoutParams().height = (int) (dm.widthPixels*.2);
         lay_tv_size_all_server.getLayoutParams().height = (int) (dm.widthPixels*.2);
 
-        tv_size_all.setTextSize((int) (dm.widthPixels*.05));
+        tv_size_all.setTextSize((int) (dm.widthPixels*.035));
 
-        tv_time.setTextSize((int) (dm.widthPixels*.05));
+        tv_time.setTextSize((int) (dm.widthPixels*.035));
 
         text_PasSize.setTextSize((int) (dm.widthPixels*.009));
         text_sizeSent.setTextSize((int) (dm.widthPixels*.009));
@@ -156,11 +180,14 @@ public class ActivityPortalSender extends AppCompatActivity {
         spaceBelowSeek.getLayoutParams().width = (int) (dm.widthPixels*.01);
         spaceBelowSeek.getLayoutParams().height = (int) (dm.widthPixels*.01);
 
-        tv_total_send.setText("File  (4/5)");
+
         tv_total_send.setTextSize((int) (dm.widthPixels*.013));
 
-    }
-    public class Async_connect extends AsyncTask<String,String,String>
+
+        socket_cancel = new Socket();
+        handler_cancel = new Handler();
+
+    }public class Async_connect extends AsyncTask<String,String,String>
     {
         @Override
         protected String doInBackground(String... strings) {
@@ -175,6 +202,21 @@ public class ActivityPortalSender extends AppCompatActivity {
             try {
                 socket = new Socket();
                 socket.connect(new InetSocketAddress(ip,port));
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+    }
+
+    public class Async_connect_cancel extends AsyncTask<String,String,String>
+    {
+        @Override
+        protected String doInBackground(String... strings) {
+            try {
+                serverSocket_cancel = new ServerSocket(5555);
+                socket_cancel = serverSocket_cancel.accept();
 
             } catch (IOException e) {
                 e.printStackTrace();
@@ -206,8 +248,8 @@ public class ActivityPortalSender extends AppCompatActivity {
                         }
                     },1000);
 
-
-
+                    new Async_connect_cancel().execute();
+                    handler.postDelayed(new run_connecting_cancel(),10);
 
 
                 } catch (IOException e) {
@@ -219,6 +261,123 @@ public class ActivityPortalSender extends AppCompatActivity {
             }
         }
     }
+
+    public class run_connecting_cancel implements Runnable
+    {
+        @Override
+        public void run() {
+            if(socket_cancel.isConnected())
+            {
+                //tv status set connected cancel
+
+                try {
+                    inputStream_cancel = socket_cancel.getInputStream();
+                    outputStream_cancel = socket_cancel.getOutputStream();
+
+                    Thread thread = new Thread(new Read_cancel());
+                    thread.start();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+            else {
+                handler_cancel.postDelayed(this,100);
+            }
+        }
+    }
+
+    public class Read_cancel implements Runnable
+    {
+
+        @Override
+        public void run() {
+            while (true)
+            {
+                try {
+                    if(inputStream_cancel.read() != -1)
+                    {
+                        byte[] bytes = new byte[inputStream_cancel.available()];
+                        inputStream_cancel.read(bytes);
+                        final StringBuilder sb = new StringBuilder();
+                        for(byte b: bytes)
+                        {
+                            sb.append((char) b);
+                        }
+                        sb.append("\n");
+
+
+                        final String[] strings = sb.toString().split("@");
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Log.i("mtiooo323", sb.toString());
+                            }
+                        });
+                        if(strings[1].contains("Confirmation"))
+                        {
+                            Confirmation_send = true;
+                        }else if(strings[1].contains("canceled"))
+                        {
+                            final String[] sf = strings[1].split(":");
+
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    String s1 = sf[1];
+                                    list_custom.get(Integer.parseInt(s1.replaceAll("[\\D]", ""))).SetBoolCancel(true);
+                                    s1 = sf[1];
+                                    list_custom.get(Integer.parseInt(s1.replaceAll("[\\D]", ""))).GetButton().setEnabled(false);
+                                    s1 = sf[1];
+                                    list_custom.get(Integer.parseInt(s1.replaceAll("[\\D]", ""))).GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+
+                                }
+                            });
+
+                        }
+                        else  if(strings[1].contains("cancel"))  {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.i("raminmaleki1234321", "run: "+strings[1]);
+                                }
+                            });
+                            int_cancel1 = Integer.parseInt(strings[1].replaceAll("[\\D]", ""));
+                            check_cancel = true;
+                        }else if(strings[1].contains("start")) {
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Log.i("raminmaleki1234", "run: ramin");
+                                }
+                            });
+                            check_start = true;
+                        }
+
+
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
+    public class write_cancel implements Runnable{
+
+        @Override
+        public void run() {
+            try {
+                String st = "rererre@cancel :" + int_cancel;
+                outputStream_cancel.write(st.getBytes());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
 
     public class Async_write extends AsyncTask<String,String,String>
     {
@@ -232,42 +391,132 @@ public class ActivityPortalSender extends AppCompatActivity {
                 NumSize = "ffhsdufshduh#" + count_all +"#";
 
                 counter = 0;
-                final List<CustomItemPortal> list_custom = new ArrayList<>();
+                int c = 0;
                 for(File f:fileList)
                 {
-                    size_all_file+= f.length();
-                    NumSize += f.getName() + ":" + f.length() + "!";
-                    final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalSender.this , dm);
-                    custom_item.SetText_name(f.getName());
-                    custom_item.SetText_size(String.valueOf(f.length()));
-                    custom_item.SetMaxValue((int) f.length());
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            linearLayout_custom_item.addView(custom_item);
+
+                    String sourcePath = f.getPath();
+                    String appName = "";
+
+                    if (sourcePath.endsWith(".apk")) {
+                        PackageInfo packageInfo = getPackageManager()
+                                .getPackageArchiveInfo(sourcePath, PackageManager.GET_ACTIVITIES);
+                        if(packageInfo != null) {
+                            ApplicationInfo appInfo = packageInfo.applicationInfo;
+                            if (Build.VERSION.SDK_INT >= 8) {
+                                appInfo.sourceDir = sourcePath;
+                                appInfo.publicSourceDir = sourcePath;
+                            }
+                            appName = String.valueOf(appInfo.loadLabel(getPackageManager()));
+                            /*File file1 = new File(s , appName+".apk");
+                            fileList.add(file1);*/
+
+                            total_all++;
+                            size_all_file+= f.length();
+                            NumSize += appName+".apk"+ ":" + f.length() + "!";
+                            final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalSender.this,dm,2);
+                            custom_item.SetText_name(appName+".apk");
+                            custom_item.SetText_size(String.valueOf(f.length()));
+                            custom_item.SetMaxValue((int) f.length());
+                            custom_item.SetNum(c);
+                            runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    linearLayout_custom_item.addView(custom_item);
+                                }
+                            });
+                            list_custom.add(custom_item);
+                            c++;
                         }
-                    });
-                    list_custom.add(custom_item);
+                    }else {
+                        total_all++;
+                        size_all_file+= f.length();
+                        NumSize += f.getName() + ":" + f.length() + "!";
+                        final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalSender.this,dm,2);
+                        custom_item.SetText_name(f.getName());
+                        custom_item.SetText_size(String.valueOf(f.length()));
+                        custom_item.SetMaxValue((int) f.length());
+                        custom_item.SetNum(c);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                linearLayout_custom_item.addView(custom_item);
+                            }
+                        });
+                        list_custom.add(custom_item);
+                        c++;
+                    }
+
+
+
+                }
+
+
+
+
+
+
+
+
+
+                outputStream.write(NumSize.getBytes());
+
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i("raminmaleki123456", "run: "+NumSize.length());
+                    }
+                });
+
+                while (true)
+                {
+                    if(check_start)
+                    {
+                        break;
+                    }
                 }
 
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        tv_size_all.setText(""+size_all_file);
+                        tv_total_send.setText(String.format("File  (0/%d)",total_all));
                     }
                 });
 
 
-                outputStream.write(NumSize.getBytes());
-
-                for(int i = 0;i<fileList.size();i++)
+                for(i = 0;i<fileList.size();i++)
                 {
-                    File f= fileList.get(i);
+                    if(list_custom.get(i).GetBoolCancel())
+                    {
+                        continue;
+                    }
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv_total_send.setText(String.format("File  (%d/%d)",i+1,total_all));
+                        }
+                    });
+
+                    final File f= fileList.get(i);
                     counter = i;
 
                     size1 = 0;
 
                     Thread.sleep(1000);
+
+                    list_custom.get(i).GetButton().setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            int_cancel1 = i;
+                            int_cancel = i;
+                            Thread thread = new Thread(new write_cancel());
+                            thread.start();
+                            list_custom.get(i).GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                            list_custom.get(i).GetButton().setEnabled(false);
+                            check_cancel = true;
+                        }
+                    });
 
                     try {
                         file_in = new FileInputStream(f);
@@ -281,6 +530,24 @@ public class ActivityPortalSender extends AppCompatActivity {
                     n = 0;
                     while ((count = file_in.read(buffer)) > 0)
                     {
+                        if(check_cancel)
+                        {
+                            if(int_cancel1 == i)
+                            {
+                                int_cancel = i;
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        list_custom.get(i).GetButton().setBackground(getDrawable(R.drawable.btncancelled));;
+                                        list_custom.get(i).GetButton().setEnabled(false);
+                                    }
+                                });
+                                break;
+                            }else {
+                                check_cancel = false;
+                            }
+
+                        }
                         outputStream.write(buffer, 0, count);
 
                         size_all_file-=count;
@@ -295,16 +562,72 @@ public class ActivityPortalSender extends AppCompatActivity {
                                 float num2 = (n * 100) / Long.valueOf(list_custom.get(counter).GetSize());
                                 list_custom.get(counter).SetText_size_receive(num2+"");
                                 list_custom.get(counter).SetProgress((int) size1);
-                                tv_size_all.setText(""+size_all_file);
+
+                                String sizeall;
+                                String pasSize;
+                                float sizeByte = (float) size_all_file;
+                                sizeByte = sizeByte/1024/1024/1024;
+                                if (sizeByte < 1.0){
+                                    sizeByte = sizeByte*1024;
+                                    if (sizeByte < 1.0){
+                                        sizeByte = sizeByte*1024;
+                                        @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+                                        sizeall = size;
+                                        pasSize = "KB";
+                                    }else {
+                                        @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+
+                                        sizeall = size;
+                                        pasSize = "MB";
+                                    }
+                                }else {
+                                    @SuppressLint("DefaultLocale") String size = String.format("%.2f" , sizeByte);
+
+                                    sizeall = size;
+                                    pasSize = "GB";
+                                }
+                                tv_size_all.setText(""+ sizeall);
+                                text_PasSize.setText(pasSize);
                             }
                         });
                     }
+
+                    if(!check_cancel)
+                    {
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                list_custom.get(i).GetButton().setEnabled(false);
+                                list_custom.get(i).GetButton().setBackground(getDrawable(R.drawable.btnfinish));
+
+                            }
+                        });
+
+                    }
+
                     Thread.sleep(1000);
+
+                    if(check_cancel)
+                    {
+                        check_cancel = false;
+                        while (true)
+                        {
+                            if(Confirmation_send)
+                            {
+                                Confirmation_send = false;
+                                break;
+                            }
+                        }
+
+                    }
+
+
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         tv_status.setText("DisConnected");
+                        Toast.makeText(ActivityPortalSender.this,"offline",Toast.LENGTH_LONG).show();
                     }
                 });
                 check_time = true;
@@ -316,6 +639,7 @@ public class ActivityPortalSender extends AppCompatActivity {
                     @Override
                     public void run() {
                         tv_status.setText("DisConnected");
+                        Toast.makeText(ActivityPortalSender.this,"offline",Toast.LENGTH_LONG).show();
                     }
                 });
 
@@ -346,13 +670,28 @@ public class ActivityPortalSender extends AppCompatActivity {
         }
     }
 
-    /*
+
+
     boolean doubleBackToExitPressedOnce = false;
     @Override
     public void onBackPressed() {
         if (doubleBackToExitPressedOnce) {
             super.onBackPressed();
-            return;
+            try {
+                socket_cancel.close();
+                socket.close();
+                for(CustomItemPortal l:list_custom)
+                {
+                   if(l.GetSize_receive().isEmpty())
+                   {
+                       l.GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                   }
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            finish();
         }
 
         this.doubleBackToExitPressedOnce = true;
@@ -366,8 +705,6 @@ public class ActivityPortalSender extends AppCompatActivity {
             }
         }, 2000);
     }
-
-     */
 
 
 }

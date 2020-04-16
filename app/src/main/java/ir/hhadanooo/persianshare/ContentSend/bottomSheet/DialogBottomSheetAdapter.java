@@ -76,24 +76,15 @@ public class DialogBottomSheetAdapter extends RecyclerView.Adapter<DialogBottomS
 
         holder.name_file.setText(item.getFilename());
         holder.size_file.setText(item.getFilesize());
-        Glide.with(holder.icon_delete).load(item.getIcon_select()).into(holder.icon_delete);
         holder.icon_file.getLayoutParams().width = (int) (width*.12);
         holder.icon_file.getLayoutParams().height = (int) (width*.12);
         holder.name_file.setMaxWidth((int) (width*.5));
         RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(
                 (int) (width*.06), (int) (width*.06));
         lp.setMargins((int) (width*.2) , (int) (width*.03) , 0 ,0);
-        holder.icon_delete.setLayoutParams(lp);
-        holder.lay_delete.getLayoutParams().width = (int) (width*.3);
-        holder.lay_delete.getLayoutParams().height = (int) (width*.12);
+
         Glide.with(holder.icon_file).load(item.getIcon_file()).into(holder.icon_file);
 
-        holder.lay_delete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
 
         String path = "";
         final String nameFile = holder.name_file.getText().toString();
@@ -196,17 +187,15 @@ public class DialogBottomSheetAdapter extends RecyclerView.Adapter<DialogBottomS
 
     public class ViewHolderBottomSheet extends RecyclerView.ViewHolder {
 
-        ImageView icon_file , icon_delete;
+        ImageView icon_file ;
         TextView name_file , size_file , name_file_show;
-        RelativeLayout lay , lay_delete;
+        RelativeLayout lay;
 
 
         ViewHolderBottomSheet(@NonNull View itemView) {
             super(itemView);
 
-            lay_delete = itemView.findViewById(R.id.lay_delete_bottom_sheet);
             icon_file = itemView.findViewById(R.id.icon_file_bottom_sheet);
-            icon_delete = itemView.findViewById(R.id.delete_bottom_sheet);
             name_file = itemView.findViewById(R.id.name_file_bottom_sheet);
             size_file = itemView.findViewById(R.id.size_file_bottom_sheet);
             name_file_show = itemView.findViewById(R.id.name_file_show_bottom_sheet);
