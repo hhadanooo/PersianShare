@@ -138,6 +138,7 @@ public class ReceiveActivity extends AppCompatActivity {
     long dt_all = 0;
 
 
+
     public static Socket socket_cancel;
     public static InputStream inputStream_cancel;
     public static OutputStream outputStream_cancel;
@@ -504,12 +505,7 @@ public class ReceiveActivity extends AppCompatActivity {
         @Override
         public void run() {
 
-            runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    Log.i("raminmaleki1234", "run: " );
-                }
-            });
+
             if(socket.isConnected())
             {
                 runOnUiThread(new Runnable() {
@@ -565,6 +561,12 @@ public class ReceiveActivity extends AppCompatActivity {
 
             if(socket_cancel.isConnected())
             {
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        Log.i("raminmaleki1234", "cancel " );
+                    }
+                });
                 try {
                     inputStream_cancel = socket_cancel.getInputStream();
                     outputStream_cancel = socket_cancel.getOutputStream();
@@ -947,6 +949,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                                     list_item.get(i).SetText_size_receive("100.0");
                                                     list_item.get(i).GetButton().setBackground(getDrawable(R.drawable.btnfinish));
                                                     list_item.get(i).GetButton().setEnabled(false);
+                                                    list_item.get(i).SetBoolCheckEnd(true);
 
                                                 }
                                             });
@@ -1028,6 +1031,28 @@ public class ReceiveActivity extends AppCompatActivity {
                 }catch (IOException e)
                 {
                     e.fillInStackTrace();
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            tv_status.setText("DisConnected");
+                            Toast.makeText(ReceiveActivity.this,"offline",Toast.LENGTH_LONG).show();
+                        }
+                    });
+
+                    for (CustomItemPortal l:list_item)
+                    {
+                        if(!l.GetCheckEnd())
+                        {
+                            l.GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                        }
+                    }
+                    check_time = true;
+
+                    try {
+                        socket.close();
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
                 }
             }
 
@@ -1040,6 +1065,14 @@ public class ReceiveActivity extends AppCompatActivity {
                         Toast.makeText(ReceiveActivity.this,"offline",Toast.LENGTH_LONG).show();
                     }
                 });
+
+                for (CustomItemPortal l:list_item)
+                {
+                    if(!l.GetCheckEnd())
+                    {
+                        l.GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                    }
+                }
                 check_time = true;
                 try {
                     socket.close();

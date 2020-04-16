@@ -599,6 +599,7 @@ public class ActivityPortalSender extends AppCompatActivity {
                             public void run() {
                                 list_custom.get(i).GetButton().setEnabled(false);
                                 list_custom.get(i).GetButton().setBackground(getDrawable(R.drawable.btnfinish));
+                                list_custom.get(i).SetBoolCheckEnd(true);
 
                             }
                         });
@@ -628,6 +629,13 @@ public class ActivityPortalSender extends AppCompatActivity {
                     public void run() {
                         tv_status.setText("DisConnected");
                         Toast.makeText(ActivityPortalSender.this,"offline",Toast.LENGTH_LONG).show();
+                        for (CustomItemPortal l:list_custom)
+                        {
+                            if(!l.GetCheckEnd())
+                            {
+                                l.GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                            }
+                        }
                     }
                 });
                 check_time = true;
@@ -640,6 +648,13 @@ public class ActivityPortalSender extends AppCompatActivity {
                     public void run() {
                         tv_status.setText("DisConnected");
                         Toast.makeText(ActivityPortalSender.this,"offline",Toast.LENGTH_LONG).show();
+                        for (CustomItemPortal l:list_custom)
+                        {
+                            if(!l.GetCheckEnd())
+                            {
+                                l.GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                            }
+                        }
                     }
                 });
 

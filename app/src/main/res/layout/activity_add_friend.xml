@@ -5,6 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:layoutDirection="ltr"
     tools:context="ir.hhadanooo.persianshare.add_friend.addFriendActivity">
 
     <View
@@ -82,7 +83,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:autoLink="web"
-            android:text="@string/www_raminhacker_ir"/>
+            android:text="https://www.google.com/"/>
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"

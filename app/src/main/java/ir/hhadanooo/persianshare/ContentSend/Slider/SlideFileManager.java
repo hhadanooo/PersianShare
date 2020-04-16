@@ -50,6 +50,8 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
     private boolean show_mp3 = true;
     private boolean show_doc = true;
 
+    String sd ;
+
 
     @Nullable
     @Override
@@ -66,10 +68,19 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
         Objects.requireNonNull(getActivity()).getWindowManager().getDefaultDisplay().getMetrics(dm);
 
             setHasOptionsMenu(true);
-
+            Spinner spinner_filter = view.findViewById(R.id.spinner_filter);
+            Spinner spinner_storage = view.findViewById(R.id.spinner_storage);
 
             path = Environment.getExternalStorageDirectory().toString();
-            String path2 = Environment.getExternalStorageState();
+            File folder = new File("/storage/");
+            for (File f:folder.listFiles())
+            {
+                if (!f.getName().equals("emulated") && !f.getName().equals("self") ){
+                    sd = f.getName();
+                    spinner_storage.setVisibility(View.VISIBLE);
+                }
+
+            }
 
             if (ActivityCompat.checkSelfPermission(getActivity() , Manifest.permission.WRITE_EXTERNAL_STORAGE) !=
                     PackageManager.PERMISSION_GRANTED){
@@ -83,7 +94,7 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
         ImageView icon_unselect_all = view.findViewById(R.id.icon_unselect_all);
         RelativeLayout lay_select_all = view.findViewById(R.id.lay_select_all);
         RelativeLayout lay_unselect_all = view.findViewById(R.id.lay_unselect_all);
-        Spinner spinner_filter = view.findViewById(R.id.spinner_filter);
+
 
 
         lay_allSelect.getLayoutParams().height = (int)(dm.widthPixels*0.1);
@@ -103,13 +114,80 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
 
 
        String[] s = {"All File" , "Music" , "Video" , "Image"};
+       String[] s1 = {"InternalStorage" , "SDCard"};
 
 
        ArrayAdapter<String> ada = new ArrayAdapter<>(Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_dropdown_item ,s );
+       ArrayAdapter<String> ada1 = new ArrayAdapter<>(Objects.requireNonNull(getContext()), android.R.layout.simple_spinner_dropdown_item ,s1 );
+
+
+
+
 
 
 
         spinner_filter.setAdapter(ada);
+        spinner_storage.setAdapter(ada1);
+
+        spinner_storage.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (position==0) {
+                    path = Environment.getExternalStorageDirectory().toString();
+                    imgList.clear();
+                    imgListAddress.clear();
+                    videoList.clear();
+                    videoListAddress.clear();
+                    musicList.clear();
+                    musicListAddress.clear();
+                    appList.clear();
+                    appListAddress.clear();
+                    docList.clear();
+                    docListAdress.clear();
+                    rv.removeAllViews();
+                    listFile.clear();
+                    listpath.clear();
+                    listAllSelect.clear();
+                    dir.clear();
+                    dir.add(path);
+                    show_img = true;
+                    show_mp3 = true;
+                    show_mp4 = true;
+                    show_doc = true;
+                    prepareData();
+                    refreshDisplay(dataList);
+                }else {
+                    path = "/storage/"+sd+"/";
+                    imgList.clear();
+                    imgListAddress.clear();
+                    videoList.clear();
+                    videoListAddress.clear();
+                    musicList.clear();
+                    musicListAddress.clear();
+                    appList.clear();
+                    appListAddress.clear();
+                    docList.clear();
+                    docListAdress.clear();
+                    rv.removeAllViews();
+                    listFile.clear();
+                    listpath.clear();
+                    listAllSelect.clear();
+                    dir.clear();
+                    dir.add(path);
+                    show_img = true;
+                    show_mp3 = true;
+                    show_mp4 = true;
+                    show_doc = true;
+                    prepareData();
+                    refreshDisplay(dataList);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
 
         spinner_filter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {

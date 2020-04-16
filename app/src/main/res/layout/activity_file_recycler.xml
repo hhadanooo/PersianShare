@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".MainActivity">
+    tools:context=".MainActivity"
+    android:layoutDirection="ltr">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -16,9 +17,16 @@
 
 
         <Spinner
-            android:layout_width="150dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/spinner_filter"
+            />
+        <Spinner
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/spinner_filter"
+            android:id="@+id/spinner_storage"
+            android:visibility="gone"
             />
 
         <RelativeLayout
@@ -60,6 +68,9 @@
 
 
     </RelativeLayout>
+
+
+
 
 
 

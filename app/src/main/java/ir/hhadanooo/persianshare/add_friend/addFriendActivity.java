@@ -145,7 +145,7 @@ public class addFriendActivity extends AppCompatActivity {
         final List<ResolveInfo> apps = getPackageManager().queryIntentActivities(intent, 0);
         ResolveInfo appinfo = null;
         for (ResolveInfo app : apps ){
-            if (app.toString().contains("ir.hhadanooo.persianshare")){
+            if (app.toString().contains("ir.hhadanooo.persianshare8565189245")){
                // Toast.makeText(this, ""+app.toString(), Toast.LENGTH_SHORT).show();
                 appinfo = app;
             }

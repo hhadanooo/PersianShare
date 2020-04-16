@@ -24,6 +24,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.net.NetworkInterface;
 import java.net.SocketException;
 import java.util.Collections;
@@ -49,9 +50,21 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
-        //String path2 = Environment.getExternalStorageDirectory().getPath() + "/";
-        // Toast.makeText(this, ""+path2, Toast.LENGTH_SHORT).show();
-        //Toast.makeText(this, ""+vpn(), Toast.LENGTH_SHORT).show();
+
+/*
+        Toast.makeText(this,Environment.getExternalStorageDirectory().getAbsolutePath(),Toast.LENGTH_LONG).show();
+        //File path = Environment.getExternalStorageDirectory().toString()+"/sdcard";
+
+        File folder = new File("/storage/0403-0201/");
+
+        for (File f:folder.listFiles())
+        {
+            Log.i("raminmaleki2323", f.getName());
+        }*/
+
+
+
+
 
 
 

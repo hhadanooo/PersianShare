@@ -38,6 +38,7 @@ public class CustomItemPortal extends RelativeLayout {
     boolean bool_cancel = false;
     int num = 0;
     int check = 0;
+    boolean check_end = false;
 
     public CustomItemPortal(Context context) {
         super(context);
@@ -287,6 +288,15 @@ public class CustomItemPortal extends RelativeLayout {
     public int GetNum()
     {
         return this.num;
+    }
+    public void SetBoolCheckEnd(boolean check)
+    {
+        this.check_end = check;
+    }
+
+    public boolean GetCheckEnd()
+    {
+        return this.check_end;
     }
 
 
