@@ -208,14 +208,47 @@ public class MainActivity extends AppCompatActivity {
         addFriends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , addFriendActivity.class));
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                            PackageManager.PERMISSION_GRANTED){
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+                    }else {
+                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
+                                PackageManager.PERMISSION_GRANTED  ){
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
+                        }else {
+                            startActivity(new Intent(MainActivity.this , addFriendActivity.class));
+                        }
+
+                    }
+                }
+
+
             }
         });
 
         setting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this , settingActivity.class));
+
+
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                            PackageManager.PERMISSION_GRANTED){
+                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+                    }else {
+                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
+                                PackageManager.PERMISSION_GRANTED  ){
+                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
+                        }else {
+                            startActivity(new Intent(MainActivity.this , settingActivity.class));
+                        }
+
+                    }
+                }
+
+
             }
         });
 

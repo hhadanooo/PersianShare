@@ -74,9 +74,9 @@ public class CheckGPS extends AppCompatActivity {
 
         RelativeLayout.LayoutParams lp_tv_check_gps = new RelativeLayout.LayoutParams(
                 ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        lp_tv_check_gps.setMargins((int) (dm.widthPixels*.43) , (int) (dm.heightPixels*.05) , 0 ,0);
+        lp_tv_check_gps.setMargins((int) (dm.widthPixels*.43) , (int) (dm.heightPixels*.005) , 0 ,0);
         tv_check_gps.setLayoutParams(lp_tv_check_gps);
-        tv_check_gps.setTextSize((int) (dm.widthPixels*.027));
+        tv_check_gps.setTextSize((int) (dm.widthPixels*.024));
         tv_check_gps.setText("Preparations\nSend");
 
         RelativeLayout.LayoutParams lp_iv_item_gps_on = new RelativeLayout.LayoutParams(
