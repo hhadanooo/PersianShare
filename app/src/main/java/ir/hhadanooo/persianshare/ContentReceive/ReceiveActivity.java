@@ -152,10 +152,24 @@ public class ReceiveActivity extends AppCompatActivity {
     RelativeLayout rel;
     WifiManager.LocalOnlyHotspotReservation reservation1;
 
+    String path = "";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_receive);
+
+
+
+        path = Environment.getExternalStorageDirectory().getAbsolutePath();
+
+
+
+
+
+
+
+
 
         Random random = new Random();
         int numrand = random.nextInt(8999);
@@ -269,33 +283,33 @@ public class ReceiveActivity extends AppCompatActivity {
     }
     public void Create_defualt_dir()
     {
-        File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare");
+        File file = new File(path + "/PershianShare");
         if(!file.exists())
         {
             file.mkdir();
         }
-        File file1 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Image");
+        File file1 = new File(path + "/PershianShare/Image");
         if(!file1.exists())
         {
             file1.mkdir();
         }
-        File file2 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Music");
+        File file2 = new File(path + "/PershianShare/Music");
         if(!file2.exists())
         {
             file2.mkdir();
         }
-        File file3 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Documents");
+        File file3 = new File(path + "/PershianShare/Documents");
         if(!file3.exists())
         {
             file3.mkdir();
         }
 
-        File file4 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Video");
+        File file4 = new File(path + "/PershianShare/Video");
         if(!file4.exists())
         {
             file4.mkdir();
         }
-        File file5 = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/App");
+        File file5 = new File(path + "/PershianShare/App");
         if(!file5.exists())
         {
             file5.mkdir();
@@ -772,7 +786,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                             f_name.endsWith(".jpeg") ||
                                             f_name.endsWith(".JPEG")
                                     )) {
-                                        dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Image/" + f_name);
+                                        dir_out = new File(path + "/PershianShare/Image/" + f_name);
                                         if(dir_out.exists())
                                         {
                                             String name =  f_name.substring(0,f_name.lastIndexOf("."));
@@ -780,7 +794,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                             Random random = new Random();
                                             int rand = random.nextInt(899);
                                             rand+= 100;
-                                            dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Image/" + name + "(Copy"+rand+")" + passname);
+                                            dir_out = new File(path + "/PershianShare/Image/" + name + "(Copy"+rand+")" + passname);
                                         }
 
 
@@ -789,7 +803,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                             f_name.endsWith(".mkv")
                                     )) {
 
-                                        dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Video/" + f_name);
+                                        dir_out = new File(path + "/PershianShare/Video/" + f_name);
                                         if(dir_out.exists())
                                         {
                                             String name =  f_name.substring(0,f_name.lastIndexOf("."));
@@ -797,7 +811,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                             Random random = new Random();
                                             int rand = random.nextInt(899);
                                             rand+= 100;
-                                            dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Video/" + name + "(Copy"+rand+")" + passname);
+                                            dir_out = new File(path + "/PershianShare/Video/" + name + "(Copy"+rand+")" + passname);
                                         }
 
 
@@ -805,7 +819,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                             f_name.endsWith(".MP3") ||
                                             f_name.endsWith(".ogg")
                                     )){
-                                        dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Music/" + f_name);
+                                        dir_out = new File(path + "/PershianShare/Music/" + f_name);
                                         if(dir_out.exists())
                                         {
                                             String name =  f_name.substring(0,f_name.lastIndexOf("."));
@@ -813,10 +827,10 @@ public class ReceiveActivity extends AppCompatActivity {
                                             Random random = new Random();
                                             int rand = random.nextInt(899);
                                             rand+= 100;
-                                            dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Music/" + name + "(Copy"+rand+")" + passname);
+                                            dir_out = new File(path + "/PershianShare/Music/" + name + "(Copy"+rand+")" + passname);
                                         }
                                     }else  if (f_name.contains(".") && (f_name.endsWith(".apk"))){
-                                        dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/App/" + f_name);
+                                        dir_out = new File(path + "/PershianShare/App/" + f_name);
                                         if(dir_out.exists())
                                         {
                                             String name =  f_name.substring(0,f_name.lastIndexOf("."));
@@ -824,10 +838,10 @@ public class ReceiveActivity extends AppCompatActivity {
                                             Random random = new Random();
                                             int rand = random.nextInt(899);
                                             rand+= 100;
-                                            dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/App/" + name + "(Copy"+rand+")" + passname);
+                                            dir_out = new File(path + "/PershianShare/App/" + name + "(Copy"+rand+")" + passname);
                                         }
                                     } else {
-                                        dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Documents/" + f_name);
+                                        dir_out = new File(path + "/PershianShare/Documents/" + f_name);
                                         if(dir_out.exists())
                                         {
                                             String name =  f_name.substring(0,f_name.lastIndexOf("."));
@@ -835,7 +849,7 @@ public class ReceiveActivity extends AppCompatActivity {
                                             Random random = new Random();
                                             int rand = random.nextInt(899);
                                             rand+= 100;
-                                            dir_out = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/PershianShare/Documents/" + name + "(Copy"+rand+")" + passname);
+                                            dir_out = new File(path + "/PershianShare/Documents/" + name + "(Copy"+rand+")" + passname);
                                         }
                                     }
 
@@ -1015,11 +1029,14 @@ public class ReceiveActivity extends AppCompatActivity {
 
 
 
-
                                     if(!dis || dir_out.length() == 0)
                                     {
                                         dis = true;
                                         dir_out.delete();
+                                    }
+                                    if(!check_cancel && dir_out.length() == 0)
+                                    {
+                                        break;
                                     }
 
                                 }
@@ -1190,7 +1207,7 @@ public class ReceiveActivity extends AppCompatActivity {
 
     public long GetFreeSize()
     {
-        StatFs stat = new StatFs(Environment.getExternalStorageDirectory().getPath());
+        StatFs stat = new StatFs(path);
         long bytesAvailable;
         if (android.os.Build.VERSION.SDK_INT >=
                 android.os.Build.VERSION_CODES.JELLY_BEAN_MR2) {
@@ -1220,7 +1237,8 @@ public class ReceiveActivity extends AppCompatActivity {
                 reservation1.close();
             }
 
-            finish();
+
+            System.exit(0);
         }
 
         this.doubleBackToExitPressedOnce = true;
@@ -1234,6 +1252,7 @@ public class ReceiveActivity extends AppCompatActivity {
             }
         }, 2000);
     }
+
 
 
 
