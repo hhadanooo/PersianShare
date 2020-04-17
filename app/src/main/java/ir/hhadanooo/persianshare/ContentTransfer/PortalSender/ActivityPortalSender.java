@@ -4,11 +4,14 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
@@ -49,6 +52,7 @@ import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.CustomItemPortal
 import ir.hhadanooo.persianshare.R;
 
 public class ActivityPortalSender extends AppCompatActivity {
+    String name = "";
     Button btn_connect;
     TextView tv_status;
     Socket socket;
@@ -95,6 +99,7 @@ public class ActivityPortalSender extends AppCompatActivity {
     int total_all ,total_received;
 
     boolean Confirmation_send = false;
+    boolean check_dis = false;
 
     boolean check_time = false;
     @Override
@@ -385,7 +390,7 @@ public class ActivityPortalSender extends AppCompatActivity {
         @Override
         protected String doInBackground(String... strings) {
 
-            handler_timer.postDelayed(run_time,100);
+
             try{
                 count_all = fileList.size();
                 NumSize = "ffhsdufshduh#" + count_all +"#";
@@ -394,6 +399,14 @@ public class ActivityPortalSender extends AppCompatActivity {
                 int c = 0;
                 for(File f:fileList)
                 {
+                    name = f.getName();
+
+                    name = name.replaceAll("!","");
+                    name = name.replaceAll("#","");
+                    name = name.replaceAll(":","");
+
+
+
 
                     String sourcePath = f.getPath();
                     String appName = "";
@@ -410,6 +423,12 @@ public class ActivityPortalSender extends AppCompatActivity {
                             appName = String.valueOf(appInfo.loadLabel(getPackageManager()));
                             /*File file1 = new File(s , appName+".apk");
                             fileList.add(file1);*/
+
+
+                            appName = appName.replaceAll("!","");
+                            appName = appName.replaceAll("#","");
+                            appName = appName.replaceAll(":","");
+
 
                             total_all++;
                             size_all_file+= f.length();
@@ -431,9 +450,9 @@ public class ActivityPortalSender extends AppCompatActivity {
                     }else {
                         total_all++;
                         size_all_file+= f.length();
-                        NumSize += f.getName() + ":" + f.length() + "!";
+                        NumSize += name + ":" + f.length() + "!";
                         final CustomItemPortal custom_item = new CustomItemPortal(ActivityPortalSender.this,dm,2);
-                        custom_item.SetText_name(f.getName());
+                        custom_item.SetText_name(name);
                         custom_item.SetText_size(String.valueOf(f.length()));
                         custom_item.SetMaxValue((int) f.length());
                         custom_item.SetNum(c);
@@ -469,12 +488,20 @@ public class ActivityPortalSender extends AppCompatActivity {
                     }
                 });
 
+                WifiManager wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+
                 while (true)
                 {
+
+                    if(!wifiManager.getConnectionInfo().getSSID().contains("AndroidShare"))
+                    {
+                        break;
+                    }
                     if(check_start)
                     {
                         break;
                     }
+
                 }
 
                 runOnUiThread(new Runnable() {
@@ -484,9 +511,20 @@ public class ActivityPortalSender extends AppCompatActivity {
                     }
                 });
 
+                if(check_start)
+                {
+                    handler_timer.postDelayed(run_time,100);
+                }
+
 
                 for(i = 0;i<fileList.size();i++)
                 {
+                    if(!check_start)
+                    {
+                        break;
+
+                    }
+
                     if(list_custom.get(i).GetBoolCancel())
                     {
                         continue;
@@ -503,7 +541,7 @@ public class ActivityPortalSender extends AppCompatActivity {
 
                     size1 = 0;
 
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
 
                     list_custom.get(i).GetButton().setOnClickListener(new View.OnClickListener() {
                         @Override
@@ -606,7 +644,7 @@ public class ActivityPortalSender extends AppCompatActivity {
 
                     }
 
-                    Thread.sleep(1000);
+                    Thread.sleep(500);
 
                     if(check_cancel)
                     {
@@ -706,7 +744,8 @@ public class ActivityPortalSender extends AppCompatActivity {
                 e.printStackTrace();
             }
 
-            finish();
+
+           System.exit(0);
         }
 
         this.doubleBackToExitPressedOnce = true;
@@ -720,6 +759,9 @@ public class ActivityPortalSender extends AppCompatActivity {
             }
         }, 2000);
     }
+
+
+
 
 
 }
