@@ -64,6 +64,7 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
     Handler handler = new Handler();
     List<ModelItemBottomSheet> listFile;
     RecyclerView rv_bottom_sheet;
+    TextView tv_plz;
     float sizeAll;
 
 
@@ -84,24 +85,19 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
         dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         lay_viewPager = findViewById(R.id.lay_viewPager);
+        tv_plz = findViewById(R.id.tv_plz);
+        tv_plz.setTextSize((int)(dm.widthPixels*0.013));
 
 
 
         new Thread(new Runnable() {
             @Override
             public void run() {
-                a = new AVLoadingIndicatorView(sendActivity.this);
+                a =  findViewById(R.id.avi);
                 handler.postDelayed(new loop() , 100);
-                a.setIndicator("BallScaleMultipleIndicator");
-                a.setIndicatorColor(Color.BLACK);
-                lay_viewPager.addView(a);
-                RelativeLayout.LayoutParams layoutParams =
-                        (RelativeLayout.LayoutParams)a.getLayoutParams();
-                layoutParams.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE);
-                a.setLayoutParams(layoutParams);
                 a.getLayoutParams().width = (int)(dm.widthPixels*0.4);
                 a.getLayoutParams().height = (int)(dm.widthPixels*0.4);
-                a.show();
+
             }
         }).start();
 
@@ -327,6 +323,7 @@ public class sendActivity extends AppCompatActivity implements TabLayout.BaseOnT
         public void run() {
             if (adapterFrag != null){
                a.hide();
+               tv_plz.setVisibility(View.GONE);
             }
             handler.postDelayed(this , 300);
 

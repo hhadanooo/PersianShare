@@ -37,7 +37,19 @@
         <activity android:name=".ContentTransfer.PortalSender.ActivityPortalSender" />
         <activity android:name=".ContentTransfer.CheckProveNameWifi" />
         <activity android:name=".ConnectToReciever.ConnectToReciever" />
-        <activity android:name=".CheckGPS.CheckGPS" />
+        <activity android:name=".CheckGPS.CheckGPS" >
+            <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+
+            <intent-filter>
+                <action android:name="android.intent.action.SEND_MULTIPLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="*/*" />
+            </intent-filter>
+        </activity>
         <activity android:name=".setting.settingActivity" />
         <activity android:name=".add_friend.addFriendActivity" />
 
@@ -54,6 +66,8 @@
                 android:value="barcode" />
         </provider>
 
+
+
         <activity android:name=".welcomePage">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -65,6 +79,10 @@
         <activity
             android:name=".ContentSend.sendActivity"
             tools:ignore="InnerclassSeparator" />
+
+
+
+
     </application>
 
 </manifest>

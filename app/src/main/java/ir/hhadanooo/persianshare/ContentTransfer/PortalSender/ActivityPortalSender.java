@@ -46,6 +46,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+import ir.hhadanooo.persianshare.CheckGPS.CheckGPS;
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.ActivityPortalReceiver;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.CustomItemPortal;
@@ -100,6 +101,7 @@ public class ActivityPortalSender extends AppCompatActivity {
 
     boolean Confirmation_send = false;
     boolean check_dis = false;
+    List<String> list;
 
     boolean check_time = false;
     @Override
@@ -113,7 +115,14 @@ public class ActivityPortalSender extends AppCompatActivity {
         fileList = new ArrayList<>();
         pathList = new ArrayList<>();
 
-        List<String> list = sendActivity.list;
+
+        if (sendActivity.list != null){
+
+            list = sendActivity.list;
+        }else{
+            list = CheckGPS.list;
+        }
+
 
 
 

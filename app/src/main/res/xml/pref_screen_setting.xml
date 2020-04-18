@@ -7,8 +7,9 @@
             android:id="@+id/set_storage"
             android:entries="@array/list_locate_save"
             android:entryValues="@array/list_locate_save"
-            android:key="list_preference_1"
+            android:key="locate_save"
             android:title="Set storage location"
+            android:defaultValue="false"
             android:summary=""/>
     </PreferenceCategory>
 

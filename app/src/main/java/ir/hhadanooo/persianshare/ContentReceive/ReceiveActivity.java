@@ -1,10 +1,12 @@
 package ir.hhadanooo.persianshare.ContentReceive;
 
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
@@ -16,6 +18,7 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.StatFs;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
@@ -57,6 +60,7 @@ import androidmads.library.qrgenearator.QRGEncoder;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.ActivityPortalReceiver;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.CustomItemPortal;
 import ir.hhadanooo.persianshare.ContentTransfer.PortalSender.ActivityPortalSender;
+import ir.hhadanooo.persianshare.MainActivity;
 import ir.hhadanooo.persianshare.R;
 
 public class ReceiveActivity extends AppCompatActivity {
@@ -153,6 +157,7 @@ public class ReceiveActivity extends AppCompatActivity {
     WifiManager.LocalOnlyHotspotReservation reservation1;
 
     String path = "";
+    String sd;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,11 +166,34 @@ public class ReceiveActivity extends AppCompatActivity {
 
 
 
-        path = Environment.getExternalStorageDirectory().getAbsolutePath();
 
 
+        SharedPreferences pref_setting = PreferenceManager.getDefaultSharedPreferences(this);
+        String locate = pref_setting.getString("locate_save" , "Internal");
 
 
+        File folder = new File("/storage/");
+        for (File f:folder.listFiles())
+        {
+            if (!f.getName().equals("emulated") && !f.getName().equals("self") ){
+                sd = f.getName();
+
+            }
+
+        }
+
+        if (locate.contains("Internal")){
+
+            path = Environment.getExternalStorageDirectory().getAbsolutePath();
+        }else {
+            if (sd != null){
+
+                path = "/storage/"+sd+"/";
+            }else {
+                path = Environment.getExternalStorageDirectory().getAbsolutePath();
+                Toast.makeText(this, "SDCard not available!", Toast.LENGTH_SHORT).show();
+            }
+        }
 
 
 
@@ -1284,5 +1312,4 @@ public class ReceiveActivity extends AppCompatActivity {
 
         }
     }
-
 }

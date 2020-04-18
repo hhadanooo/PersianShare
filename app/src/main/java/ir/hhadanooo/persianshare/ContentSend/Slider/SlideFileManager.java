@@ -20,6 +20,7 @@ import android.util.Log;
 import android.widget.AdapterView;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 import java.io.File;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
     private List<String> dataList;
     @SuppressLint("StaticFieldLeak")
     private DisplayMetrics dm;
-    private List<String>   listAllSelect , listpath   ,dir , docList , docListAdress , appList , appListAddress ,videoList , videoListAddress , musicList , musicListAddress , imgList , imgListAddress , listAddress;
+    private List<String>   listAllSelect  ,  listpath   ,dir , docList , docListAdress , appList , appListAddress ,videoList , videoListAddress , musicList , musicListAddress , imgList , imgListAddress , listAddress;
     private String path;
     private boolean show_img = true;
     private boolean show_mp4 = true;
@@ -110,6 +111,8 @@ public class SlideFileManager extends Fragment implements ListAdapterRecycler.It
 
         lay_unselect_all.getLayoutParams().width = (int)(dm.widthPixels*0.08);
         lay_unselect_all.getLayoutParams().height = (int)(dm.widthPixels*0.1);
+
+
 
 
 
