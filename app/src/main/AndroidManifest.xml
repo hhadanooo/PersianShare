@@ -2,7 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="ir.hhadanooo.persianshare">
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
@@ -31,7 +30,9 @@
         android:roundIcon="@drawable/official_logo"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
-        tools:ignore="AllowBackup,GoogleAppIndexingWarning">
+        tools:ignore="AllowBackup,GoogleAppIndexingWarning"
+        >
+        <meta-data android:name="com.pushpole.sdk.token" android:value="PUSHPOLE_841170480845"/>
         <activity android:name=".ContentReceive.ReceiveActivity"></activity>
         <activity android:name=".ContentTransfer.PortalReceiver.ActivityPortalReceiver" />
         <activity android:name=".ContentTransfer.PortalSender.ActivityPortalSender" />

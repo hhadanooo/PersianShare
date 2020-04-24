@@ -24,6 +24,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.pushpole.sdk.PushPole;
+
 import java.io.File;
 import java.net.NetworkInterface;
 import java.net.SocketException;
@@ -35,8 +38,7 @@ import ir.hhadanooo.persianshare.CheckGPS.CheckGPS;
 import ir.hhadanooo.persianshare.ConnectToReciever.ConnectToReciever;
 import ir.hhadanooo.persianshare.ContentReceive.ReceiveActivity;
 import ir.hhadanooo.persianshare.ContentSend.sendActivity;
-import ir.hhadanooo.persianshare.ContentTransfer.PortalReceiver.ActivityPortalReceiver;
-import ir.hhadanooo.persianshare.ContentTransfer.PortalSender.ActivityPortalSender;
+
 import ir.hhadanooo.persianshare.add_friend.addFriendActivity;
 import ir.hhadanooo.persianshare.setting.settingActivity;
 
@@ -50,6 +52,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Objects.requireNonNull(getSupportActionBar()).hide();
+        PushPole.initialize(this,true);
 
 
 
@@ -292,4 +295,6 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
+
+
 }
