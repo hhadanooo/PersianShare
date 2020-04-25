@@ -34,4 +34,6 @@
             android:summaryOff="Hide apps default phone"/>
     </PreferenceCategory>
 
+
 </PreferenceScreen>
+

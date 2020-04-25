@@ -49,11 +49,8 @@ public class addFriendActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_friend);
-        Window window = getWindow();
-        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-        window.setStatusBarColor(Color.TRANSPARENT);
-        window.setNavigationBarColor(Color.TRANSPARENT);
-        QRGEncoder qrgEncoder = new QRGEncoder("https://www.google.com/"
+        Objects.requireNonNull(getSupportActionBar()).hide();
+        QRGEncoder qrgEncoder = new QRGEncoder("It is under repair!!"
                 , null, QRGContents.Type.TEXT,200);
 
 
@@ -80,6 +77,7 @@ public class addFriendActivity extends AppCompatActivity {
         ImageView iv_back_customAction = view.findViewById(R.id.iv_back_customAction);
         TextView text_customAction = view.findViewById(R.id.text_customAction);
 
+
         iv_back_customAction.getLayoutParams().width = (int)(dm.widthPixels*0.1);
         iv_back_customAction.getLayoutParams().height = (int)(dm.widthPixels*0.1);
         text_customAction.setTextSize((int)(dm.widthPixels*0.016));
@@ -103,6 +101,7 @@ public class addFriendActivity extends AppCompatActivity {
         View view_bottom_btn_bluetooth =findViewById(R.id.view_bottom_btn_bluetooth);
         View view_bottom_qrcode =findViewById(R.id.view_bottom_qrcode);
         Button btn_more_add_friends =findViewById(R.id.btn_more_add_friends);
+        View viewTop = findViewById(R.id.viewTop);
 
 
         try {
@@ -121,6 +120,8 @@ public class addFriendActivity extends AppCompatActivity {
         view_bottom_btn_bluetooth.getLayoutParams().width = (int)(dm.widthPixels*0.75);
 
         view_bottom_qrcode.getLayoutParams().width = (int)(dm.widthPixels*0.47);
+
+        viewTop.getLayoutParams().height = (int)(dm.widthPixels*0.1);
 
         view_bottom_link.getLayoutParams().width = (int)(dm.widthPixels*0.25);
 
@@ -181,7 +182,7 @@ public class addFriendActivity extends AppCompatActivity {
         btn_more_add_friends.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String shareBody = "this is link downLoad: https://www.google.com/";
+                String shareBody = "It is under repair!!";
                 Intent sharingIntent = new Intent(android.content.Intent.ACTION_SEND);
                 sharingIntent.setType("text/plain");
                 sharingIntent.putExtra(android.content.Intent.EXTRA_SUBJECT, "Subject Here");

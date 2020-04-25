@@ -9,14 +9,16 @@
     tools:context="ir.hhadanooo.persianshare.add_friend.addFriendActivity">
 
     <View
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="#919191"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/viewTop"
+        />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/viewTop"
         android:orientation="vertical">
 
         <TextView
@@ -83,7 +85,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_height="wrap_content"
             android:autoLink="web"
-            android:text="https://www.google.com/"/>
+            android:text="It is under repair!!"/>
         <View
             android:layout_width="wrap_content"
             android:layout_height="1dp"

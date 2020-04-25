@@ -10,6 +10,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
+import android.net.MailTo;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -17,10 +18,15 @@ import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -66,12 +72,13 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         diaVpn = new Dialog(this);
         diaVpn.setContentView(R.layout.layout_dialog_vpn);
-        ImageView iv_warning , iv_btn;
+        ImageView iv_warning , iv_btn ;
         TextView tv_title ,tv_message;
         iv_warning = diaVpn.findViewById(R.id.iv_warning);
         iv_btn = diaVpn.findViewById(R.id.iv_btn);
         tv_title = diaVpn.findViewById(R.id.tv_title);
         tv_message = diaVpn.findViewById(R.id.tv_message);
+
 
         iv_warning.getLayoutParams().width = (int)(dm.widthPixels*.12);
         iv_warning.getLayoutParams().height = (int)(dm.widthPixels*.12);
@@ -108,17 +115,21 @@ public class MainActivity extends AppCompatActivity {
         }
 
 
-        DisplayMetrics dm = new DisplayMetrics();
+        final DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         soft_key();
 
         ImageView sendButton = findViewById(R.id.SendButton);
         ImageView receiveButton = findViewById(R.id.ReceiveButton);
-        ImageView setting = findViewById(R.id.setting);
-        ImageView addFriends = findViewById(R.id.addFriends);
+        ImageView menu_main = findViewById(R.id.menu_main);
+
         ImageView icon_bg = findViewById(R.id.icon_bg);
         View view_left = findViewById(R.id.view_left);
         View view_top = findViewById(R.id.view_top);
+
+
+        menu_main.getLayoutParams().width = (int)(dm.widthPixels*0.1);
+        menu_main.getLayoutParams().height = (int)(dm.widthPixels*.1);
 
 
         sendButton.getLayoutParams().width = (int)(dm.widthPixels*0.5);
@@ -127,11 +138,6 @@ public class MainActivity extends AppCompatActivity {
         receiveButton.getLayoutParams().width = (int)(dm.widthPixels*0.5);
         receiveButton.getLayoutParams().height = (int)(dm.widthPixels*.14);
 
-        setting.getLayoutParams().width = (int)(dm.widthPixels*0.08);
-        setting.getLayoutParams().height = (int)(dm.widthPixels*0.08);
-
-        addFriends.getLayoutParams().width = (int)(dm.widthPixels*0.08);
-        addFriends.getLayoutParams().height = (int)(dm.widthPixels*0.08);
 
         view_left.getLayoutParams().width = (int)(dm.widthPixels*0.01);
         view_top.getLayoutParams().height = (int)(dm.heightPixels*0.065);
@@ -196,53 +202,84 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        addFriends.setOnClickListener(new View.OnClickListener() {
+
+
+        menu_main.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                PopupMenu pop = new PopupMenu(MainActivity.this , v);
+                pop.getMenuInflater().inflate(R.menu.pop_menu , pop.getMenu());
+                pop.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
 
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                            PackageManager.PERMISSION_GRANTED){
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
-                    }else {
-                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
-                                PackageManager.PERMISSION_GRANTED  ){
-                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
-                        }else {
-                            startActivity(new Intent(MainActivity.this , addFriendActivity.class));
+                        if (item.getItemId() == R.id.Invite){
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                                        PackageManager.PERMISSION_GRANTED){
+                                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+                                }else {
+                                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
+                                            PackageManager.PERMISSION_GRANTED  ){
+                                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
+                                    }else {
+                                        startActivity(new Intent(MainActivity.this , addFriendActivity.class));
+                                    }
+
+                                }
+                            }
+
+                        }else if (item.getItemId() == R.id.Setting){
+
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                                if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
+                                        PackageManager.PERMISSION_GRANTED){
+                                    requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
+                                }else {
+                                    if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
+                                            PackageManager.PERMISSION_GRANTED  ){
+                                        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
+                                    }else {
+                                        startActivity(new Intent(MainActivity.this , settingActivity.class));
+                                    }
+
+                                }
+                            }
+
+                        }else if (item.getItemId() == R.id.About){
+
+                           Dialog dia_about = new Dialog(MainActivity.this);
+                           dia_about.setContentView(R.layout.dia_about);
+                           Objects.requireNonNull(dia_about.getWindow()).setLayout(
+                                   (int)(dm.widthPixels*0.9) , ViewGroup.LayoutParams.WRAP_CONTENT);
+                           TextView Policy_Title = dia_about.findViewById(R.id.Policy_Title);
+                           TextView Policy_Text = dia_about.findViewById(R.id.Policy_Text);
+                           ImageView btn_rating = dia_about.findViewById(R.id.btn_rating);
+
+                            Policy_Title.setTextSize((int)(dm.widthPixels*0.016));
+                            Policy_Text.setTextSize((int)(dm.widthPixels*0.012));
+
+                            btn_rating.getLayoutParams().width = (int)(dm.widthPixels*0.52);
+                            btn_rating.getLayoutParams().height = (int)(dm.widthPixels*0.12);
+
+                            btn_rating.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    //////
+                                }
+                            });
+
+
+                           dia_about.show();
                         }
 
+                        return false;
                     }
-                }
-
-
+                });
+                pop.show();
             }
         });
-
-        setting.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    if (checkSelfPermission(Manifest.permission.READ_EXTERNAL_STORAGE) !=
-                            PackageManager.PERMISSION_GRANTED){
-                        requestPermissions(new String[]{Manifest.permission.READ_EXTERNAL_STORAGE} , 564);
-                    }else {
-                        if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION  ) !=
-                                PackageManager.PERMISSION_GRANTED  ){
-                            requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION  } , 564);
-                        }else {
-                            startActivity(new Intent(MainActivity.this , settingActivity.class));
-                        }
-
-                    }
-                }
-
-
-            }
-        });
-
 
 
 
@@ -295,6 +332,7 @@ public class MainActivity extends AppCompatActivity {
         window.setStatusBarColor(Color.TRANSPARENT);
         window.setNavigationBarColor(Color.TRANSPARENT);
     }
+
 
 
 }
