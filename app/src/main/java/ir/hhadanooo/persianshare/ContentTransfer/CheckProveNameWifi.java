@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
+import java.util.List;
 import java.util.Objects;
 
 import ir.hhadanooo.persianshare.ConnectToReciever.ConnectToReciever;
@@ -37,6 +39,7 @@ public class CheckProveNameWifi extends AppCompatActivity {
         ImageView iv = findViewById(R.id.animWithMorche);
         Glide.with(this).load(R.drawable.animgif).into(iv);
         wifiManager = (WifiManager) getApplicationContext().getSystemService(WIFI_SERVICE);
+
         handler = new Handler();
         connManager =  (ConnectivityManager) getSystemService(CONNECTIVITY_SERVICE);
         mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
@@ -75,6 +78,17 @@ public class CheckProveNameWifi extends AppCompatActivity {
             if(counter == 3)
             {
                 check_connecting = true;
+
+                List<WifiConfiguration> list = wifiManager.getConfiguredNetworks();
+                for( WifiConfiguration i : list ) {
+                    if(i.SSID.contains(wifiName))
+                    {
+                        wifiManager.removeNetwork(i.networkId);
+                    }
+
+                    //wifiManager.saveConfiguration();
+                }
+
                 startActivity(new Intent(CheckProveNameWifi.this, ConnectToReciever.class));
                 finish();
             }
