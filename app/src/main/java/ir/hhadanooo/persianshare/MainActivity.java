@@ -267,9 +267,10 @@ public class MainActivity extends AppCompatActivity {
                             btn_rating.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    Intent intent = new Intent(Intent.ACTION_EDIT);
-                                    intent.setData(Uri.parse("bazaar://details?id=" + "ir.hhadanooo.persianshare"));
-                                    intent.setPackage("ir.hhadanooo.persianshare");
+                                    String url= "myket://comment?id=ir.hhadanooo.persianshare";
+                                    Intent intent = new Intent();
+                                    intent.setAction(Intent.ACTION_VIEW);
+                                    intent.setData(Uri.parse(url));
                                     startActivity(intent);
                                 }
                             });
