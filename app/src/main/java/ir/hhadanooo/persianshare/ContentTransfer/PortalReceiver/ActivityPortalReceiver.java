@@ -392,6 +392,12 @@ public class ActivityPortalReceiver extends AppCompatActivity {
 
                                         }
 
+                                        if(n > f_size)
+                                        {
+                                            socket.close();
+
+                                        }
+
                                         if(f_size == n)
                                         {
                                             dis = true;

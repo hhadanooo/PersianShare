@@ -39,6 +39,7 @@ import com.google.zxing.WriterException;
 import com.google.zxing.common.BitMatrix;
 
 import java.io.BufferedReader;
+import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -63,11 +64,14 @@ import ir.hhadanooo.persianshare.ContentTransfer.PortalSender.ActivityPortalSend
 import ir.hhadanooo.persianshare.MainActivity;
 import ir.hhadanooo.persianshare.R;
 
+import static com.google.zxing.common.CharacterSetECI.UTF8;
+
 public class ReceiveActivity extends AppCompatActivity {
 
     /////////////////////////////////////////////////////////////////
     ImageView img_barcode;
     TextView tv_name_wifi;
+    boolean check_break = false;
 
 
 
@@ -660,20 +664,18 @@ public class ReceiveActivity extends AppCompatActivity {
 
 
                             try {
-                                Thread.sleep(2000);
+                                Thread.sleep(3000);
                             } catch (InterruptedException e) {
                                 e.printStackTrace();
                             }
                             byte[] buffer = new byte[inputStream.available()];
                             final StringBuilder sb = new StringBuilder();
 
+
                             inputStream.read(buffer);
 
-                            for (byte b : buffer) {
-                                sb.append((char) b);
-                            }
-
-
+                            String re = new String(buffer,"UTF-8");
+                            sb.append(re);
 
 
 
@@ -695,8 +697,10 @@ public class ReceiveActivity extends AppCompatActivity {
                                     final String[] sp = s[z].split(":");
                                     final CustomItemPortal custom_item = new CustomItemPortal(ReceiveActivity.this, dm, 1);
 
+
                                     custom_item.SetNum(z);
-                                    custom_item.SetText_name(sp[0]);
+                                    String name = new String(sp[0].getBytes(), "UTF-8");
+                                    custom_item.SetText_name(name);
                                     String str = sp[1];
 
                                     long size = Long.valueOf(str);
@@ -981,6 +985,34 @@ public class ReceiveActivity extends AppCompatActivity {
 
                                         }
 
+                                        if(n > f_size)
+                                        {
+                                            socket_cancel.close();
+                                            socket.close();
+                                            runOnUiThread(new Runnable() {
+                                                @Override
+                                                public void run() {
+                                                    tv_status.setText("DisConnected");
+                                                    Toast.makeText(ReceiveActivity.this,"offline",Toast.LENGTH_LONG).show();
+                                                }
+                                            });
+
+                                            for (CustomItemPortal l:list_item)
+                                            {
+                                                if(!l.GetCheckEnd())
+                                                {
+                                                    l.GetButton().setBackground(getDrawable(R.drawable.btncancelled));
+                                                }
+                                            }
+                                            check_time = true;
+
+                                            try {
+                                                socket.close();
+                                            } catch (IOException ex) {
+                                                ex.printStackTrace();
+                                            }
+                                        }
+
                                         if(f_size == n)
                                         {
                                             dis = true;
@@ -1002,8 +1034,10 @@ public class ReceiveActivity extends AppCompatActivity {
 
                                     }
 
+
                                     if(check_cancel)
                                     {
+                                        check_break = true;
                                         check_cancel = false;
                                         try {
                                             Thread.sleep(1000);
@@ -1062,9 +1096,12 @@ public class ReceiveActivity extends AppCompatActivity {
                                         dis = true;
                                         dir_out.delete();
                                     }
-                                    if(!check_cancel && dir_out.length() == 0)
+
+                                    if(!check_break && dir_out.length() == 0)
                                     {
                                         break;
+                                    }else {
+                                        check_break = true;
                                     }
 
                                 }
@@ -1153,12 +1190,7 @@ public class ReceiveActivity extends AppCompatActivity {
 
                         if(strings[1].contains("canceled"))
                         {
-                            runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    Log.i("raminmaelki1234321", "run: "+strings[1]);
-                                }
-                            });
+
                             runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
