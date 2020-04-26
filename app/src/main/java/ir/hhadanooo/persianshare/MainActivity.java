@@ -11,6 +11,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.graphics.Color;
 import android.net.MailTo;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
@@ -266,7 +267,10 @@ public class MainActivity extends AppCompatActivity {
                             btn_rating.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
-                                    //////
+                                    Intent intent = new Intent(Intent.ACTION_EDIT);
+                                    intent.setData(Uri.parse("bazaar://details?id=" + "ir.hhadanooo.persianshare"));
+                                    intent.setPackage("ir.hhadanooo.persianshare");
+                                    startActivity(intent);
                                 }
                             });
 

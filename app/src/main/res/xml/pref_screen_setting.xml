@@ -9,13 +9,13 @@
             android:entryValues="@array/list_locate_save"
             android:key="locate_save"
             android:title="Set storage location"
-            android:defaultValue="false"
+            android:defaultValue="true"
             android:summary=""/>
     </PreferenceCategory>
 
     <PreferenceCategory android:title="Advance">
 
-
+-
         <SwitchPreference
             android:id="@+id/vibration_switch"
             android:defaultValue="true"
